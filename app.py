@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 
 
 @st.cache_data
@@ -84,7 +85,7 @@ st.markdown(
         width: 100%;
         margin-top: 15px;
         margin-bottom: 15px;
-        overflow-x: auto; /* يتيح التمرير لو الشاشة صغيرة جداً */
+        overflow-x: auto;
     }
     .styled-table {
         direction: rtl;
@@ -261,17 +262,16 @@ if show_button:
 
         st.markdown(table_html, unsafe_allow_html=True)
 
-        # زر طباعة يعمل بشكل صحيح عبر JavaScript مباشر
-        st.markdown(
-            """
-                    <div style="text-align: center; margin-top: 10px;">
-                        <button onclick="window.print();" style="background-color: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                            🖨️ طباعة النتيجة
-                        </button>
-                    </div>
-                """,
-            unsafe_allow_html=True,
-        )
+        # زر طباعة يعمل بكفاءة تامة عبر مكون Components في Streamlit
+        print_button_html = """
+        <div style="text-align: center; margin-top: 10px;">
+            <button onclick="parent.window.print();" style="background-color: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 300px;">
+                🖨️ طباعة النتيجة
+            </button>
+        </div>
+        """
+        components.html(print_button_html, height=70)
+
       else:
         st.error('رقم الجلوس غير موجود، تأكد من الرقم وادخله مرة أخرى.')
     else:
