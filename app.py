@@ -272,30 +272,30 @@ if show_button:
             table_rows_html += f'<tr><td><b>{k}</b></td><td>{v}</td></tr>'
 
         final_html = f"""
-                <div class="watermark">Mohamed Abdalatef</div>
-                <div class="result-container">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #007BFF; padding-bottom: 10px;">
-                        <div style="font-size: 18px; font-weight: bold; color: #007BFF;">Mohamed Abdalatef</div>
-                        <div style="text-align: center; font-size: 20px; font-weight: bold; color: #007BFF;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
-                        <div style="width: 100px;"></div>
-                    </div>
-                    
-                    <div class="table-wrapper">
-                        <table class='styled-table'>
-                            <thead>
-                                <tr>
-                                    <th>بيانات الطالب</th>
-                                    <th>النتيجة</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {table_rows_html}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
-                </div>
-                """
+        <div class="watermark">Mohamed Abdalatef</div>
+        <div class="result-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #007BFF; padding-bottom: 10px;">
+                <div style="font-size: 18px; font-weight: bold; color: #007BFF;">Mohamed Abdalatef</div>
+                <div style="text-align: center; font-size: 20px; font-weight: bold; color: #007BFF;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
+                <div style="width: 100px;"></div>
+            </div>
+            
+            <div class="table-wrapper">
+                <table class='styled-table'>
+                    <thead>
+                        <tr>
+                            <th>بيانات الطالب</th>
+                            <th>النتيجة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {table_rows_html}
+                    </tbody>
+                </table>
+            </div>
+            <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
+        </div>
+        """
 
         st.markdown(final_html, unsafe_allow_html=True)
 
