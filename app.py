@@ -159,21 +159,27 @@ if show_button:
                     font-family: sans-serif;
                     background-color: transparent;
                     margin: 0;
-                    padding: 10px;
+                    padding: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }}
                 .result-container {{
                     border: 3px solid #007BFF;
                     border-radius: 15px;
-                    padding: 20px;
+                    padding: 25px;
                     background-color: #ffffff;
                     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
                     position: relative;
+                    width: 100%;
+                    max-width: 650px;
+                    margin: 0 auto;
                 }}
                 .header-box {{
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 15px;
+                    margin-bottom: 20px;
                     border-bottom: 2px solid #007BFF;
                     padding-bottom: 10px;
                 }}
@@ -223,7 +229,7 @@ if show_button:
                     font-size: 14px;
                     font-weight: bold;
                     color: #555555;
-                    margin-top: 15px;
+                    margin-top: 20px;
                 }}
                 .watermark {{
                     position: absolute;
@@ -267,17 +273,7 @@ if show_button:
         </html>
         """
 
-        # عرض النتيجة عبر components.html لضمان رندر الجدول صح 100% ومنع إظهار الكود النصي
-        components.html(final_html, height=650, scrolling=True)
-
-        print_button_html = """
-        <div style="text-align: center; margin-top: 15px;">
-            <button onclick="parent.window.print();" style="background-color: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 300px;">
-                🖨️ طباعة النتيجة
-            </button>
-        </div>
-        """
-        components.html(print_button_html, height=75)
+        components.html(final_html, height=600, scrolling=True)
 
       else:
         st.error('رقم الجلوس غير موجود، تأكد من الرقم وادخله مرة أخرى.')
