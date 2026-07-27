@@ -275,6 +275,15 @@ if show_button:
 
         components.html(final_html, height=600, scrolling=True)
 
+        print_button_html = """
+        <div style="text-align: center; margin-top: 15px;">
+            <button onclick="parent.window.print();" style="background-color: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 300px;">
+                🖨️ طباعة النتيجة
+            </button>
+        </div>
+        """
+        components.html(print_button_html, height=75)
+
       else:
         st.error('رقم الجلوس غير موجود، تأكد من الرقم وادخله مرة أخرى.')
     else:
