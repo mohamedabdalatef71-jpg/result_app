@@ -1,4 +1,3 @@
-import base64
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
@@ -35,17 +34,6 @@ def load_data():
   return pd.DataFrame(processed_rows)
 
 
-def get_image_base64(path):
-  try:
-    with open(path, 'rb') as f:
-      data = f.read()
-    return base64.b64encode(data).decode()
-  except:
-    return ''
-
-
-img_base64 = get_image_base64('179151.jpg')
-
 df = load_data()
 
 st.markdown(
@@ -60,23 +48,23 @@ st.markdown(
 )
 
 st.markdown(
-    f"""
+    """
     <style>
-    div.stTextInput > label {{
+    div.stTextInput > label {
         color: #ff6600 !important;
         font-weight: bold;
         font-size: 18px;
         text-align: center;
         display: block;
-    }}
-    div.stTextInput input {{
+    }
+    div.stTextInput input {
         border: 2px solid #ff6600;
         border-radius: 8px;
         text-align: center;
         font-size: 16px;
-    }}
+    }
     
-    div.stButton > button:first-child {{
+    div.stButton > button:first-child {
         background-color: #007BFF;
         color: white;
         font-size: 18px;
@@ -84,14 +72,13 @@ st.markdown(
         border-radius: 8px;
         border: none;
         width: 100%;
-    }}
-    div.stButton > button:first-child:hover {{
+    }
+    div.stButton > button:first-child:hover {
         background-color: #0056b3;
         color: white;
-    }}
+    }
     
-    /* البرواز الداخلي للنتيجة واضح تماماً */
-    .result-container {{
+    .result-container {
         border: 3px solid #007BFF !important;
         border-radius: 15px;
         padding: 20px;
@@ -99,9 +86,9 @@ st.markdown(
         background-color: #ffffff !important;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         position: relative;
-    }}
+    }
 
-    .table-wrapper {{
+    .table-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -109,11 +96,11 @@ st.markdown(
         margin-top: 10px;
         margin-bottom: 10px;
         overflow-x: auto;
-    }}
-    .styled-table {{
+    }
+    
+    .styled-table {
         direction: rtl;
-        border-collapse: separate;
-        border-spacing: 0;
+        border-collapse: collapse;
         font-size: 16px;
         font-family: sans-serif;
         background-color: #ffffff;
@@ -124,71 +111,59 @@ st.markdown(
         width: 100%;
         max-width: 680px;
         min-width: 300px;
-    }}
+    }
     
-    .styled-table th {{
+    .styled-table th {
         background-color: #007BFF;
         color: white;
         padding: 12px 15px;
         font-size: 18px;
-        border-bottom: 2px solid #000000;
-        border-right: 2px solid #000000;
-    }}
-    .styled-table th:first-child {{
-        border-right: none;
-    }}
+        border: 2px solid #000000;
+    }
     
-    .styled-table td {{
+    .styled-table td {
         padding: 10px 15px;
-        border-bottom: 2px solid #000000;
-        border-right: 2px solid #000000;
+        border: 2px solid #000000;
         color: #000000;
         font-weight: bold;
-    }}
-    .styled-table tr td:first-child {{
-        border-right: none;
-    }}
-    .styled-table tbody tr:last-child td {{
-        border-bottom: none;
-    }}
+    }
     
-    .styled-table td:nth-child(1), .styled-table th:nth-child(1) {{ 
+    .styled-table td:nth-child(1), .styled-table th:nth-child(1) { 
         text-align: right; 
         padding-right: 15px; 
         width: 45%;
         white-space: nowrap;
-    }}
-    .styled-table td:nth-child(2), .styled-table th:nth-child(2) {{ 
+    }
+    .styled-table td:nth-child(2), .styled-table th:nth-child(2) { 
         text-align: right; 
         padding-right: 20px; 
         width: 55%;
-    }}
+    }
     
-    .styled-table tbody tr:nth-of-type(even) {{ background-color: #f9f9f9; }}
-    .styled-table tbody tr:nth-of-type(odd) {{ background-color: #ffffff; }}
+    .styled-table tbody tr:nth-of-type(even) { background-color: #f9f9f9; }
+    .styled-table tbody tr:nth-of-type(odd) { background-color: #ffffff; }
 
-    .designer-credit {{
+    .designer-credit {
         text-align: center;
         font-size: 14px;
         font-weight: bold;
         color: #555555;
         margin-top: 12px;
-    }}
+    }
 
-    @media print {{
-        body {{ background: white !important; }}
+    @media print {
+        body { background: white !important; }
         
-        .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"], div.stSuccess {{
+        .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"], div.stSuccess {
             display: none !important;
-        }}
+        }
 
-        @page {{
+        @page {
             size: A4;
             margin: 15mm;
-        }}
+        }
         
-        /* البرواز الخارجي للصفحة بالكامل */
-        body::before {{
+        body::before {
             content: "";
             position: fixed;
             top: 0;
@@ -199,49 +174,31 @@ st.markdown(
             border-radius: 12px;
             pointer-events: none;
             z-index: 9998;
-        }}
+        }
 
-        /* مربع اللوجو الكروكي في الزاوية العليا اليمين */
-        .print-logo-box {{
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            width: 75px;
-            height: 75px;
-            border: 2px solid #007BFF;
-            border-radius: 8px;
-            background-image: url('data:image/jpeg;base64,{img_base64}');
-            background-size: cover;
-            background-position: center;
-            background-color: #ffffff;
-            z-index: 10000;
-        }}
-
-        .result-container {{
+        .result-container {
             border: 3px solid #007BFF !important;
             box-shadow: none !important;
             margin: 0 !important;
             padding: 15px !important;
             width: 100% !important;
             background-color: #ffffff !important;
-        }}
+        }
 
-        .watermark {{
+        /* العلامة المائية عبارة عن اسمك متناسقة في الخلفية */
+        .watermark {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 350px;
-            height: 350px;
-            background-image: url('data:image/jpeg;base64,{img_base64}');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.12;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 60px;
+            font-weight: bold;
+            color: rgba(0, 123, 255, 0.08);
             z-index: 9999;
             pointer-events: none;
-        }}
-    }}
+            white-space: nowrap;
+        }
+    }
     </style>
 """,
     unsafe_allow_html=True,
@@ -300,10 +257,15 @@ if show_button:
         }
 
         table_html = f"""
-                <div class="print-logo-box"></div>
-                <div class="watermark"></div>
+                <div class="watermark">Mohamed Abdalatef</div>
                 <div class="result-container">
-                    <div style="text-align: center; font-size: 22px; font-weight: bold; color: #007BFF; margin-bottom: 15px;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
+                    <!-- اسمك بوضوح بدل المربع الفاضي -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #007BFF; padding-bottom: 10px;">
+                        <div style="font-size: 18px; font-weight: bold; color: #007BFF;">Mohamed Abdalatef</div>
+                        <div style="text-align: center; font-size: 20px; font-weight: bold; color: #007BFF;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
+                        <div style="width: 100px;"></div>
+                    </div>
+                    
                     <div class="table-wrapper">
                         <table class='styled-table'>
                             <thead>
@@ -321,7 +283,7 @@ if show_button:
 
         table_html += f"""
                             <tr>
-                                <th style="background-color: #007BFF; color: white; text-align: right; padding: 12px 15px; white-space: nowrap;">المواد</th>
+                                <th style="background-color: #007BFF; color: white; text-align: right; padding: 12px 15px;">المواد</th>
                                 <th style="background-color: #007BFF; color: white; text-align: right; padding: 12px 15px; border-right: 2px solid #000000;">التقديرات / الدرجات</th>
                             </tr>
                 """
