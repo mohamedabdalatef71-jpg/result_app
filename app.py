@@ -77,127 +77,6 @@ st.markdown(
         background-color: #0056b3;
         color: white;
     }
-    
-    .result-container {
-        border: 3px solid #007BFF !important;
-        border-radius: 15px;
-        padding: 20px;
-        margin-top: 20px;
-        background-color: #ffffff !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        position: relative;
-    }
-
-    .table-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        overflow-x: auto;
-    }
-    
-    .styled-table {
-        direction: rtl;
-        border-collapse: collapse;
-        font-size: 16px;
-        font-family: sans-serif;
-        background-color: #ffffff;
-        color: #000000;
-        border: 2px solid #000000;
-        border-radius: 10px;
-        overflow: hidden;
-        width: 100%;
-        max-width: 680px;
-        min-width: 300px;
-    }
-    
-    .styled-table th {
-        background-color: #007BFF;
-        color: white;
-        padding: 12px 15px;
-        font-size: 18px;
-        border: 2px solid #000000;
-    }
-    
-    .styled-table td {
-        padding: 10px 15px;
-        border: 2px solid #000000;
-        color: #000000;
-        font-weight: bold;
-    }
-    
-    .styled-table td:nth-child(1), .styled-table th:nth-child(1) { 
-        text-align: right; 
-        padding-right: 15px; 
-        width: 45%;
-        white-space: nowrap;
-    }
-    .styled-table td:nth-child(2), .styled-table th:nth-child(2) { 
-        text-align: right; 
-        padding-right: 20px; 
-        width: 55%;
-    }
-    
-    .styled-table tbody tr:nth-of-type(even) { background-color: #f9f9f9; }
-    .styled-table tbody tr:nth-of-type(odd) { background-color: #ffffff; }
-
-    .designer-credit {
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        color: #555555;
-        margin-top: 12px;
-    }
-
-    @media print {
-        body { background: white !important; }
-        
-        .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"], div.stSuccess {
-            display: none !important;
-        }
-
-        @page {
-            size: A4;
-            margin: 15mm;
-        }
-        
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 4px solid #007BFF;
-            border-radius: 12px;
-            pointer-events: none;
-            z-index: 9998;
-        }
-
-        .result-container {
-            border: 3px solid #007BFF !important;
-            box-shadow: none !important;
-            margin: 0 !important;
-            padding: 15px !important;
-            width: 100% !important;
-            background-color: #ffffff !important;
-        }
-
-        .watermark {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 60px;
-            font-weight: bold;
-            color: rgba(0, 123, 255, 0.08);
-            z-index: 9999;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-    }
     </style>
 """,
     unsafe_allow_html=True,
@@ -229,7 +108,7 @@ if show_button:
       if not result.empty:
         st.markdown(
             '<div style="text-align: center; color: green; font-weight:'
-            ' bold;">تم العثور على النتيجة بنجاح!</div>',
+            ' bold; margin-bottom: 10px;">تم العثور على النتيجة بنجاح!</div>',
             unsafe_allow_html=True,
         )
 
@@ -262,8 +141,7 @@ if show_button:
 
         table_rows_html += """
             <tr>
-                <th style="background-color: #007BFF; color: white; text-align: right; padding: 12px 15px;">المواد</th>
-                <th style="background-color: #007BFF; color: white; text-align: right; padding: 12px 15px; border-right: 2px solid #000000;">التقديرات / الدرجات</th>
+                <th colspan="2" style="background-color: #007BFF; color: white; text-align: center; padding: 12px 15px; font-size: 18px;">المواد والتقديرات</th>
             </tr>
         """
 
@@ -272,32 +150,125 @@ if show_button:
             table_rows_html += f'<tr><td><b>{k}</b></td><td>{v}</td></tr>'
 
         final_html = f"""
-        <div class="watermark">Mohamed Abdalatef</div>
-        <div class="result-container">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #007BFF; padding-bottom: 10px;">
-                <div style="font-size: 18px; font-weight: bold; color: #007BFF;">Mohamed Abdalatef</div>
-                <div style="text-align: center; font-size: 20px; font-weight: bold; color: #007BFF;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
-                <div style="width: 100px;"></div>
+        <!DOCTYPE html>
+        <html lang="ar" dir="rtl">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body {{
+                    font-family: sans-serif;
+                    background-color: transparent;
+                    margin: 0;
+                    padding: 10px;
+                }}
+                .result-container {{
+                    border: 3px solid #007BFF;
+                    border-radius: 15px;
+                    padding: 20px;
+                    background-color: #ffffff;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                    position: relative;
+                }}
+                .header-box {{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 15px;
+                    border-bottom: 2px solid #007BFF;
+                    padding-bottom: 10px;
+                }}
+                .table-wrapper {{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    width: 100%;
+                }}
+                .styled-table {{
+                    direction: rtl;
+                    border-collapse: collapse;
+                    font-size: 16px;
+                    background-color: #ffffff;
+                    color: #000000;
+                    border: 2px solid #000000;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    width: 100%;
+                }}
+                .styled-table th {{
+                    background-color: #007BFF;
+                    color: white;
+                    padding: 12px 15px;
+                    font-size: 18px;
+                    border: 2px solid #000000;
+                    text-align: right;
+                }}
+                .styled-table td {{
+                    padding: 10px 15px;
+                    border: 2px solid #000000;
+                    color: #000000;
+                    font-weight: bold;
+                }}
+                .styled-table td:nth-child(1) {{ 
+                    text-align: right; 
+                    width: 45%;
+                }}
+                .styled-table td:nth-child(2) {{ 
+                    text-align: right; 
+                    width: 55%;
+                }}
+                .styled-table tbody tr:nth-of-type(even) {{ background-color: #f9f9f9; }}
+                .styled-table tbody tr:nth-of-type(odd) {{ background-color: #ffffff; }}
+                .designer-credit {{
+                    text-align: center;
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #555555;
+                    margin-top: 15px;
+                }}
+                .watermark {{
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%) rotate(-30deg);
+                    font-size: 50px;
+                    font-weight: bold;
+                    color: rgba(0, 123, 255, 0.05);
+                    z-index: 0;
+                    pointer-events: none;
+                    white-space: nowrap;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class="result-container">
+                <div class="watermark">Mohamed Abdalatef</div>
+                <div class="header-box">
+                    <div style="font-size: 16px; font-weight: bold; color: #007BFF;">Mohamed Abdalatef</div>
+                    <div style="font-size: 18px; font-weight: bold; color: #007BFF;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
+                    <div style="width: 80px;"></div>
+                </div>
+                
+                <div class="table-wrapper">
+                    <table class='styled-table'>
+                        <thead>
+                            <tr>
+                                <th>بيانات الطالب</th>
+                                <th>النتيجة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {table_rows_html}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
             </div>
-            
-            <div class="table-wrapper">
-                <table class='styled-table'>
-                    <thead>
-                        <tr>
-                            <th>بيانات الطالب</th>
-                            <th>النتيجة</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {table_rows_html}
-                    </tbody>
-                </table>
-            </div>
-            <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
-        </div>
+        </body>
+        </html>
         """
 
-        st.markdown(final_html, unsafe_allow_html=True)
+        # عرض النتيجة عبر components.html لضمان رندر الجدول صح 100% ومنع إظهار الكود النصي
+        components.html(final_html, height=650, scrolling=True)
 
         print_button_html = """
         <div style="text-align: center; margin-top: 15px;">
