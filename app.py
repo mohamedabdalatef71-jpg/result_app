@@ -35,7 +35,6 @@ def load_data():
   return pd.DataFrame(processed_rows)
 
 
-# دالة لتحويل الصورة لـ Base64 عشان تظهر بدون مشاكل في الـ HTML
 def get_image_base64(path):
   try:
     with open(path, 'rb') as f:
@@ -91,12 +90,13 @@ st.markdown(
         color: white;
     }}
     
+    /* البرواز الداخلي للنتيجة واضح تماماً */
     .result-container {{
-        border: 3px solid #007BFF;
+        border: 3px solid #007BFF !important;
         border-radius: 15px;
         padding: 20px;
         margin-top: 20px;
-        background-color: #ffffff;
+        background-color: #ffffff !important;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         position: relative;
     }}
@@ -187,6 +187,7 @@ st.markdown(
             margin: 15mm;
         }}
         
+        /* البرواز الخارجي للصفحة بالكامل */
         body::before {{
             content: "";
             position: fixed;
@@ -200,7 +201,7 @@ st.markdown(
             z-index: 9998;
         }}
 
-        /* مربع اللوجو الكروكي في الزاوية العليا */
+        /* مربع اللوجو الكروكي في الزاوية العليا اليمين */
         .print-logo-box {{
             position: fixed;
             top: 25px;
@@ -217,11 +218,12 @@ st.markdown(
         }}
 
         .result-container {{
-            border: none !important;
+            border: 3px solid #007BFF !important;
             box-shadow: none !important;
             margin: 0 !important;
-            padding: 10px !important;
+            padding: 15px !important;
             width: 100% !important;
+            background-color: #ffffff !important;
         }}
 
         .watermark {{
