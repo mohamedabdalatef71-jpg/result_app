@@ -35,7 +35,6 @@ def load_data():
 
 df = load_data()
 
-# عنوان الموقع باللون الأزرق وفي المنتصف مع إضافة (الترم الاول 2026)
 st.markdown(
     "<h1 style='text-align: center; color: #007BFF; margin-bottom:"
     " 5px;'>نتيجة الفرقة الإعدادية</h1>",
@@ -47,7 +46,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# التنسيق النهائي مع زيادة العرض بمقدار 2 سم تقريباً
 st.markdown(
     """
     <style>
@@ -86,6 +84,7 @@ st.markdown(
         width: 100%;
         margin-top: 15px;
         margin-bottom: 15px;
+        overflow-x: auto; /* يتيح التمرير لو الشاشة صغيرة جداً */
     }
     .styled-table {
         direction: rtl;
@@ -99,9 +98,9 @@ st.markdown(
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        width: auto;
-        min-width: 530px; /* تم تكبير العرض الأدنى بمقدار 2 سم تقريباً */
-        max-width: 680px; /* تم تكبير العرض الأقصى بمقدار 2 سم تقريباً */
+        width: 100%;
+        max-width: 680px;
+        min-width: 300px;
     }
     
     .styled-table th {
@@ -262,10 +261,11 @@ if show_button:
 
         st.markdown(table_html, unsafe_allow_html=True)
 
+        # زر طباعة يعمل بشكل صحيح عبر JavaScript مباشر
         st.markdown(
             """
                     <div style="text-align: center; margin-top: 10px;">
-                        <button onclick="parent.window.print();" style="background-color: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <button onclick="window.print();" style="background-color: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                             🖨️ طباعة النتيجة
                         </button>
                     </div>
