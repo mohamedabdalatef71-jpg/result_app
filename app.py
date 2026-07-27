@@ -159,17 +159,21 @@ st.markdown(
         .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"] {
             display: none !important;
         }
+        /* إعدادات صورتك الشخصية كعلامة مائية شفافة في خلفية الطباعة */
         .watermark {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 70px;
-            color: rgba(0, 123, 255, 0.08);
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            background-image: url('179151.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.12;
             z-index: 9999;
             pointer-events: none;
-            font-weight: bold;
-            white-space: nowrap;
         }
     }
     </style>
@@ -226,7 +230,7 @@ if show_button:
         }
 
         table_html = f"""
-                <div class="watermark">نتيجة الفرقة الإعدادية - الترم الاول 2026</div>
+                <div class="watermark"></div>
                 <div class="table-wrapper">
                     <table class='styled-table'>
                         <thead>
@@ -262,7 +266,6 @@ if show_button:
 
         st.markdown(table_html, unsafe_allow_html=True)
 
-        # زر طباعة يعمل بكفاءة تامة عبر مكون Components في Streamlit
         print_button_html = """
         <div style="text-align: center; margin-top: 10px;">
             <button onclick="parent.window.print();" style="background-color: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 300px;">
