@@ -78,7 +78,6 @@ st.markdown(
         color: white;
     }
     
-    /* حاوية النتيجة مع برواز خارجي احترافي */
     .result-container {
         border: 3px solid #007BFF;
         border-radius: 15px;
@@ -165,19 +164,40 @@ st.markdown(
 
     @media print {
         body { background: white !important; }
-        /* إخفاء عناصر الموقع تماماً أثناء الطباعة */
+        
+        /* إخفاء عناصر الموقع والزرار ورسالة النجاح تماماً */
         .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"], div.stSuccess {
             display: none !important;
         }
-        /* إظهار برواز النتيجة فقط بشكل منظم ونظيف */
+
+        /* إضافة برواز خارجي يحيط بصفحة الطباعة بالكامل */
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid #007BFF;
+            border-radius: 12px;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
         .result-container {
-            border: 3px solid #000000 !important;
+            border: none !important;
             box-shadow: none !important;
             margin: 0 !important;
-            padding: 15px !important;
+            padding: 10px !important;
             width: 100% !important;
         }
-        /* العلامة المائية بصورتك الشخصية */
+
+        /* العلامة المائية بصورتك الشخصية في المنتصف */
         .watermark {
             position: fixed;
             top: 50%;
@@ -223,7 +243,6 @@ if show_button:
       result = df[df[seat_col] == clean_input]
 
       if not result.empty:
-        # رسالة النجاح وضعت داخل ديف مخصص لتختفي تماماً عند الطباعة
         st.markdown(
             '<div style="text-align: center; color: green; font-weight:'
             ' bold;">تم العثور على النتيجة بنجاح!</div>',
@@ -255,7 +274,7 @@ if show_button:
         table_html = f"""
                 <div class="watermark"></div>
                 <div class="result-container">
-                    <div style="text-align: center; font-size: 20px; font-weight: bold; color: #007BFF; margin-bottom: 15px;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
+                    <div style="text-align: center; font-size: 22px; font-weight: bold; color: #007BFF; margin-bottom: 15px;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
                     <div class="table-wrapper">
                         <table class='styled-table'>
                             <thead>
