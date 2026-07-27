@@ -78,13 +78,24 @@ st.markdown(
         color: white;
     }
     
+    /* حاوية النتيجة مع برواز خارجي احترافي */
+    .result-container {
+        border: 3px solid #007BFF;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
     .table-wrapper {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 100%;
-        margin-top: 15px;
-        margin-bottom: 15px;
+        margin-top: 10px;
+        margin-bottom: 10px;
         overflow-x: auto;
     }
     .styled-table {
@@ -96,9 +107,8 @@ st.markdown(
         background-color: #ffffff;
         color: #000000;
         border: 2px solid #000000;
-        border-radius: 12px;
+        border-radius: 10px;
         overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         width: 100%;
         max-width: 680px;
         min-width: 300px;
@@ -150,16 +160,24 @@ st.markdown(
         font-size: 14px;
         font-weight: bold;
         color: #555555;
-        margin-top: 8px;
-        margin-bottom: 15px;
+        margin-top: 12px;
     }
 
     @media print {
         body { background: white !important; }
-        .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"] {
+        /* إخفاء عناصر الموقع تماماً أثناء الطباعة */
+        .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"], div.stSuccess {
             display: none !important;
         }
-        /* إعدادات صورتك الشخصية كعلامة مائية شفافة في خلفية الطباعة */
+        /* إظهار برواز النتيجة فقط بشكل منظم ونظيف */
+        .result-container {
+            border: 3px solid #000000 !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            padding: 15px !important;
+            width: 100% !important;
+        }
+        /* العلامة المائية بصورتك الشخصية */
         .watermark {
             position: fixed;
             top: 50%;
@@ -205,7 +223,12 @@ if show_button:
       result = df[df[seat_col] == clean_input]
 
       if not result.empty:
-        st.success('تم العثور على النتيجة بنجاح!')
+        # رسالة النجاح وضعت داخل ديف مخصص لتختفي تماماً عند الطباعة
+        st.markdown(
+            '<div style="text-align: center; color: green; font-weight:'
+            ' bold;">تم العثور على النتيجة بنجاح!</div>',
+            unsafe_allow_html=True,
+        )
 
         student_data = {}
         for col in df.columns:
@@ -231,15 +254,17 @@ if show_button:
 
         table_html = f"""
                 <div class="watermark"></div>
-                <div class="table-wrapper">
-                    <table class='styled-table'>
-                        <thead>
-                            <tr>
-                                <th>بيانات الطالب</th>
-                                <th>النتيجة</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div class="result-container">
+                    <div style="text-align: center; font-size: 20px; font-weight: bold; color: #007BFF; margin-bottom: 15px;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
+                    <div class="table-wrapper">
+                        <table class='styled-table'>
+                            <thead>
+                                <tr>
+                                    <th>بيانات الطالب</th>
+                                    <th>النتيجة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                 """
 
         for k, v in personal_info.items():
@@ -258,8 +283,9 @@ if show_button:
             table_html += f'<tr><td><b>{k}</b></td><td>{v}</td></tr>'
 
         table_html += f"""
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
                 </div>
                 """
@@ -267,13 +293,13 @@ if show_button:
         st.markdown(table_html, unsafe_allow_html=True)
 
         print_button_html = """
-        <div style="text-align: center; margin-top: 10px;">
+        <div style="text-align: center; margin-top: 15px;">
             <button onclick="parent.window.print();" style="background-color: #28a745; color: white; padding: 12px 30px; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 300px;">
                 🖨️ طباعة النتيجة
             </button>
         </div>
         """
-        components.html(print_button_html, height=70)
+        components.html(print_button_html, height=75)
 
       else:
         st.error('رقم الجلوس غير موجود، تأكد من الرقم وادخله مرة أخرى.')
