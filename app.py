@@ -141,7 +141,7 @@ st.markdown(
     
     .styled-table td:nth-child(1), .styled-table th:nth-child(1) { 
         text-align: right; 
-        padding-right: 15px; 
+        padding-right: 15px; 1
         width: 45%;
         white-space: nowrap;
     }
@@ -189,7 +189,7 @@ st.markdown(
             z-index: 9998;
         }
 
-        /* مربع اللوجو الكروكي في الزاوية العليا (يمين الصفحة لأنها RTL) */
+        /* مربع اللوجو الكروكي في الزاوية العليا */
         .print-logo-box {
             position: fixed;
             top: 25px;
@@ -198,10 +198,18 @@ st.markdown(
             height: 75px;
             border: 2px solid #007BFF;
             border-radius: 8px;
-            background-image: url('179151.jpg');
-            background-size: cover;
-            background-position: center;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
             z-index: 10000;
+        }
+
+        .print-logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .result-container {
@@ -212,7 +220,7 @@ st.markdown(
             width: 100% !important;
         }
 
-        /* العلامة المائية الخفيفة في الخلفية */
+        /* العلامة المائية في الخلفية */
         .watermark {
             position: fixed;
             top: 50%;
@@ -287,7 +295,9 @@ if show_button:
         }
 
         table_html = f"""
-                <div class="print-logo-box"></div>
+                <div class="print-logo-box">
+                    <img src="179151.jpg" alt="Logo">
+                </div>
                 <div class="watermark"></div>
                 <div class="result-container">
                     <div style="text-align: center; font-size: 22px; font-weight: bold; color: #007BFF; margin-bottom: 15px;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
