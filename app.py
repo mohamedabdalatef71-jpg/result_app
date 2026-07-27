@@ -170,12 +170,12 @@ st.markdown(
             display: none !important;
         }
 
-        /* إضافة برواز خارجي يحيط بصفحة الطباعة بالكامل */
         @page {
             size: A4;
             margin: 15mm;
         }
         
+        /* البرواز الخارجي للصفحة */
         body::before {
             content: "";
             position: fixed;
@@ -189,6 +189,21 @@ st.markdown(
             z-index: 9998;
         }
 
+        /* مربع اللوجو الكروكي في الزاوية العليا (يمين الصفحة لأنها RTL) */
+        .print-logo-box {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            width: 75px;
+            height: 75px;
+            border: 2px solid #007BFF;
+            border-radius: 8px;
+            background-image: url('179151.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 10000;
+        }
+
         .result-container {
             border: none !important;
             box-shadow: none !important;
@@ -197,7 +212,7 @@ st.markdown(
             width: 100% !important;
         }
 
-        /* العلامة المائية بصورتك الشخصية في المنتصف */
+        /* العلامة المائية الخفيفة في الخلفية */
         .watermark {
             position: fixed;
             top: 50%;
@@ -272,6 +287,7 @@ if show_button:
         }
 
         table_html = f"""
+                <div class="print-logo-box"></div>
                 <div class="watermark"></div>
                 <div class="result-container">
                     <div style="text-align: center; font-size: 22px; font-weight: bold; color: #007BFF; margin-bottom: 15px;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
