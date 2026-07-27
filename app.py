@@ -185,7 +185,6 @@ st.markdown(
             background-color: #ffffff !important;
         }
 
-        /* العلامة المائية عبارة عن اسمك متناسقة في الخلفية */
         .watermark {
             position: fixed;
             top: 50%;
@@ -256,10 +255,25 @@ if show_button:
             if k not in base_keys and k != seat_col
         }
 
-        table_html = f"""
+        table_rows_html = ''
+        for k, v in personal_info.items():
+          if k:
+            table_rows_html += f'<tr><td><b>{k}</b></td><td>{v}</td></tr>'
+
+        table_rows_html += """
+            <tr>
+                <th style="background-color: #007BFF; color: white; text-align: right; padding: 12px 15px;">المواد</th>
+                <th style="background-color: #007BFF; color: white; text-align: right; padding: 12px 15px; border-right: 2px solid #000000;">التقديرات / الدرجات</th>
+            </tr>
+        """
+
+        for k, v in subjects_info.items():
+          if k:
+            table_rows_html += f'<tr><td><b>{k}</b></td><td>{v}</td></tr>'
+
+        final_html = f"""
                 <div class="watermark">Mohamed Abdalatef</div>
                 <div class="result-container">
-                    <!-- اسمك بوضوح بدل المربع الفاضي -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #007BFF; padding-bottom: 10px;">
                         <div style="font-size: 18px; font-weight: bold; color: #007BFF;">Mohamed Abdalatef</div>
                         <div style="text-align: center; font-size: 20px; font-weight: bold; color: #007BFF;">نتيجة الفرقة الإعدادية - الترم الأول 2026</div>
@@ -275,24 +289,7 @@ if show_button:
                                 </tr>
                             </thead>
                             <tbody>
-                """
-
-        for k, v in personal_info.items():
-          if k:
-            table_html += f'<tr><td><b>{k}</b></td><td>{v}</td></tr>'
-
-        table_html += f"""
-                            <tr>
-                                <th style="background-color: #007BFF; color: white; text-align: right; padding: 12px 15px;">المواد</th>
-                                <th style="background-color: #007BFF; color: white; text-align: right; padding: 12px 15px; border-right: 2px solid #000000;">التقديرات / الدرجات</th>
-                            </tr>
-                """
-
-        for k, v in subjects_info.items():
-          if k:
-            table_html += f'<tr><td><b>{k}</b></td><td>{v}</td></tr>'
-
-        table_html += f"""
+                                {table_rows_html}
                             </tbody>
                         </table>
                     </div>
@@ -300,7 +297,7 @@ if show_button:
                 </div>
                 """
 
-        st.markdown(table_html, unsafe_allow_html=True)
+        st.markdown(final_html, unsafe_allow_html=True)
 
         print_button_html = """
         <div style="text-align: center; margin-top: 15px;">
