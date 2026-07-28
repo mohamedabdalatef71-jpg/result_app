@@ -13,7 +13,8 @@ df = load_data()
 LOGO_URL = "https://raw.githubusercontent.com/mohamedabdalatef71-jpg/result_app/ff737f289e52d0456b3202bf07a2d512ebb33d92/logo.jpg"
 
 if LOGO_URL:
-    logo_img_tag = f'<img src="{LOGO_URL}" style="max-height: 75px; margin-bottom: 5px; display: block; margin-right: 0; margin-left: auto;" alt="شعار الكلية">'
+    # حطينالها خصائص CSS قوية لإزالة الخلفية البيضاء نهائياً ودمجها بصفاء
+    logo_img_tag = f'<img src="{LOGO_URL}" style="max-height: 85px; margin-bottom: 5px; display: block; margin-right: 0; margin-left: auto; mix-blend-mode: multiply; filter: contrast(120%);" alt="شعار الكلية">'
 else:
     logo_img_tag = '<div style="font-size: 35px; color: #1b4d3e; margin-bottom: 5px;">🏛️</div>'
 
@@ -107,6 +108,16 @@ if show_button:
                         .styled-table tbody tr:nth-of-type(even) {{ background-color: #faf9f6; }}
                         .designer-credit {{ text-align: center; font-size: 13px; font-weight: bold; color: #2e8b57; margin-top: 12px; }}
                         
+                        /* إزالة الخلفية البيضاء من اللوجو تماماً وجعله شفافاً ومدمجاً بشكل احترافي */
+                        .clean-logo {{
+                            max-height: 85px;
+                            margin-bottom: 5px;
+                            display: block;
+                            margin-right: 0;
+                            margin-left: auto;
+                            mix-blend-mode: multiply;
+                        }}
+                        
                         .print-btn-container {{ margin-top: 20px; text-align: center; width: 100%; }}
                         .print-btn {{
                             background-color: #2e8b57; color: white; padding: 12px 40px; 
@@ -130,14 +141,17 @@ if show_button:
                                 box-shadow: none !important;
                                 margin: 0 !important;
                             }}
+                            .clean-logo {{ mix-blend-mode: multiply !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
                             .styled-table th {{ background-color: #1b4d3e !important; color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
                         }}
                     </style>
                 </head>
                 <body>
                     <div class="print-page-wrapper">
-                        <!-- اللوجو الأساسي في مكانه الصحيح بأعلى اليمين وبدون أي تشويش على الجدول -->
-                        <div style="margin-bottom: 5px; text-align: right;">{logo_img_tag}</div>
+                        <!-- اللوجو ظاهر في مكانه وبدون أي خلفية بيضاء مزعجة -->
+                        <div style="margin-bottom: 5px; text-align: right;">
+                            <img src="{LOGO_URL}" class="clean-logo" alt="شعار الكلية">
+                        </div>
                         <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
                         <div class="print-header-subtitle">الترم الاول 2026</div>
                         <div class="print-ayah">قل لن يصيبنا إلا ما كتب الله لنا</div>
