@@ -19,7 +19,7 @@ else:
 
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700&display=swap');
     html, body, [class*="css"] { font-family: 'Cairo', sans-serif; }
     .main-title { font-family: 'Amiri', serif; text-align: center; color: #2e8b57; font-size: 38px; font-weight: bold; margin-bottom: 0px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
     .sub-title { text-align: center; color: #d4af37; font-size: 22px; font-weight: bold; margin-bottom: 20px; }
@@ -71,7 +71,7 @@ if show_button:
                 subjects_info = {k: v for k, v in student_data.items() if k not in base_keys and k != seat_col}
                 
                 rows_html = "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in personal_info.items() if k])
-                rows_html += '<tr><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 12px 15px; white-space: nowrap;">المواد</th><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 12px 15px; border-right: 2px solid #b8860b;">التقديرات / الدرجات</th></tr>'
+                rows_html += '<tr><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 10px 12px; white-space: nowrap;">المواد</th><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 10px 12px; border-right: 2px solid #b8860b;">التقديرات / الدرجات</th></tr>'
                 rows_html += "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in subjects_info.items() if k])
 
                 full_card_html = f"""
@@ -79,13 +79,13 @@ if show_button:
                 <html lang="ar" dir="rtl">
                 <head>
                     <meta charset="UTF-8">
-                    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+                    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
                     <style>
-                        body {{ font-family: 'Cairo', sans-serif; background-color: #ffffff; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }}
+                        body {{ font-family: 'Cairo', sans-serif; background-color: #ffffff; margin: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }}
                         .print-page-wrapper {{ 
                             border: 3px solid #1b4d3e; 
-                            border-radius: 15px;
-                            padding: 20px; 
+                            border-radius: 12px;
+                            padding: 15px; 
                             width: 100%; 
                             max-width: 580px; 
                             background-color: #ffffff; 
@@ -94,28 +94,56 @@ if show_button:
                             box-sizing: border-box;
                             overflow: hidden;
                         }}
-                        .print-header-title {{ font-family: 'Amiri', serif; text-align: center; color: #2e8b57; font-size: 26px; font-weight: bold; margin-bottom: 0px; position: relative; z-index: 2; }}
-                        .print-header-subtitle {{ text-align: center; color: #d4af37; font-size: 17px; font-weight: bold; margin-bottom: 6px; position: relative; z-index: 2; }}
-                        .print-ayah {{ text-align: center; color: #2e8b57; font-family: 'Amiri', serif; font-weight: bold; font-size: 15px; margin-bottom: 12px; position: relative; z-index: 2; }}
-                        .table-container {{ width: 100%; display: flex; justify-content: center; margin-bottom: 10px; position: relative; z-index: 2; }}
-                        .styled-table {{ direction: rtl; border-collapse: separate; border-spacing: 0; font-size: 15px; background-color: rgba(255, 255, 255, 0.95); color: #000000; border: 2px solid #1b4d3e; border-radius: 10px; overflow: hidden; width: 100%; }}
-                        .styled-table th {{ background-color: #1b4d3e; color: #ffffff; padding: 10px 12px; font-size: 16px; border-bottom: 2px solid #1b4d3e; border-right: 2px solid #b8860b; }}
+                        .print-header-title {{ font-family: 'Amiri', serif; text-align: center; color: #2e8b57; font-size: 24px; font-weight: bold; margin-bottom: 0px; position: relative; z-index: 2; }}
+                        .print-header-subtitle {{ text-align: center; color: #d4af37; font-size: 16px; font-weight: bold; margin-bottom: 4px; position: relative; z-index: 2; }}
+                        .print-ayah {{ text-align: center; color: #2e8b57; font-family: 'Amiri', serif; font-weight: bold; font-size: 14px; margin-bottom: 8px; position: relative; z-index: 2; }}
+                        .table-container {{ width: 100%; display: flex; justify-content: center; margin-bottom: 8px; position: relative; z-index: 2; }}
+                        .styled-table {{ direction: rtl; border-collapse: separate; border-spacing: 0; font-size: 14px; background-color: rgba(255, 255, 255, 0.95); color: #000000; border: 2px solid #1b4d3e; border-radius: 8px; overflow: hidden; width: 100%; }}
+                        .styled-table th {{ background-color: #1b4d3e; color: #ffffff; padding: 8px 10px; font-size: 15px; border-bottom: 2px solid #1b4d3e; border-right: 2px solid #b8860b; }}
                         .styled-table th:first-child {{ border-right: none; }}
-                        .styled-table td {{ padding: 8px 12px; border-bottom: 1px solid #e0e0e0; border-right: 2px solid #1b4d3e; color: #000000; font-weight: bold; }}
+                        .styled-table td {{ padding: 6px 10px; border-bottom: 1px solid #e0e0e0; border-right: 2px solid #1b4d3e; color: #000000; font-weight: bold; }}
                         .styled-table tr td:first-child {{ border-right: none; }}
                         .styled-table td:nth-child(1), .styled-table th:nth-child(1) {{ text-align: right; width: 45%; white-space: nowrap; }}
                         .styled-table td:nth-child(2), .styled-table th:nth-child(2) {{ text-align: right; width: 55%; }}
                         .styled-table tbody tr:nth-of-type(even) {{ background-color: rgba(250, 249, 246, 0.95); }}
-                        .designer-credit {{ text-align: center; font-size: 13px; font-weight: bold; color: #2e8b57; margin-top: 12px; position: relative; z-index: 2; }}
                         
-                        /* العلامة المائية مضبوطة في منتصف الجدول بالضبط وأمام الكلام وبشفافية خفيفة */
+                        /* منطقة آية الكرسي في الفراغ تحت الجدول */
+                        . kursi-text {{
+                            font-family: 'Amiri', serif;
+                            font-size: 11.5px;
+                            color: #1b4d3e;
+                            text-align: justify;
+                            text-align-last: center;
+                            line-height: 1.5;
+                            margin: 8px 5px;
+                            font-weight: bold;
+                            position: relative;
+                            z-index: 2;
+                            opacity: 0.85;
+                        }}
+
+                        /* اسم الكلية وحقوق التصميم في الحافة تحت */
+                        .footer-container {{
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-top: 8px;
+                            border-top: 1px dashed #d4af37;
+                            padding-top: 6px;
+                            position: relative;
+                            z-index: 2;
+                        }}
+                        .college-name {{ font-family: 'Amiri', serif; font-size: 13px; font-weight: bold; color: #d4af37; }}
+                        .designer-credit {{ font-size: 11px; font-weight: bold; color: #2e8b57; }}
+                        
+                        /* العلامة المائية في منتصف الجدول وبشفافية هادئة وأمام العناصر */
                         .watermark-logo {{ 
                             position: absolute; 
-                            top: 67%; 
+                            top: 52%; 
                             left: 50%; 
                             transform: translate(-50%, -50%); 
-                            width: 390px; 
-                            opacity: 0.08; 
+                            width: 350px; 
+                            opacity: 0.07; 
                             z-index: 10; 
                             pointer-events: none; 
                             mix-blend-mode: multiply;
@@ -134,7 +162,7 @@ if show_button:
                         @media print {{
                             @page {{
                                 size: A4 portrait;
-                                margin: 10mm;
+                                margin: 8mm;
                             }}
                             body {{ background-color: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
                             .print-btn-container {{ display: none !important; }}
@@ -146,7 +174,7 @@ if show_button:
                                 margin: 0 !important;
                             }}
                             .watermark-logo {{ 
-                                opacity: 0.08 !important; 
+                                opacity: 0.07 !important; 
                                 z-index: 10 !important;
                                 mix-blend-mode: multiply !important;
                                 -webkit-print-color-adjust: exact; 
@@ -161,17 +189,28 @@ if show_button:
                         <!-- العلامة المائية في منتصف الجدول تماماً -->
                         <img src="{LOGO_URL}" class="watermark-logo" alt="Watermark">
                         
-                        <div style="margin-bottom: 5px; text-align: right; position: relative; z-index: 2;">{logo_img_tag}</div>
+                        <div style="margin-bottom: 2px; text-align: right; position: relative; z-index: 2;">{logo_img_tag}</div>
                         <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
                         <div class="print-header-subtitle">الترم الاول 2026</div>
                         <div class="print-ayah">قل لن يصيبنا إلا ما كتب الله لنا</div>
+                        
                         <div class="table-container">
                             <table class='styled-table'>
                                 <thead><tr><th>بيانات الطالب</th><th>النتيجة</th></tr></thead>
                                 <tbody>{rows_html}</tbody>
                             </table>
                         </div>
-                        <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
+
+                        <!-- آية الكرسي كاملة في المنطقة الخالية تحت الجدول -->
+                        <div class="kursi-text">
+                            اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ ما فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ
+                        </div>
+
+                        <!-- حافة الصفحة من تحت: اسم الكلية واسمك بخط مزخرف متناسق -->
+                        <div class="footer-container">
+                            <div class="college-name">كلية الهندسة - جامعة الأزهر</div>
+                            <div class="designer-credit">Designed by Eng. Mohamed Abdelatif</div>
+                        </div>
                     </div>
                     
                     <div class="print-btn-container">
