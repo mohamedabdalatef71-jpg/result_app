@@ -10,7 +10,7 @@ def load_data():
 
 df = load_data()
 
-# تصميم أكاديمي وتنسيق صفحة الطباعة والإطار الفخم
+# التصميم الأكاديمي وتنسيق الإطار والطباعة
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap');
@@ -68,12 +68,49 @@ st.markdown("""
         color: #ffd700;
     }
     
+    /* تصميم الإطار المحيط بالنتيجة في الموقع والطباعة */
+    .print-page-wrapper {
+        border: 3px solid #1b4d3e;
+        border-radius: 15px;
+        padding: 25px;
+        margin: 20px auto;
+        max-width: 650px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 20px rgba(27, 77, 62, 0.15);
+    }
+
+    .print-header-title {
+        font-family: 'Amiri', serif;
+        text-align: center;
+        color: #2e8b57;
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 0px;
+    }
+    
+    .print-header-subtitle {
+        text-align: center;
+        color: #d4af37;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .print-ayah {
+        text-align: center;
+        color: #2e8b57;
+        font-family: 'Amiri', serif;
+        font-weight: bold;
+        font-size: 17px;
+        margin-bottom: 20px;
+    }
+
     .table-container {
         width: 100%;
         overflow-x: auto;
         display: flex;
         justify-content: center;
-        margin-top: 15px;
+        margin-top: 10px;
         margin-bottom: 15px;
         padding-bottom: 5px;
     }
@@ -88,7 +125,6 @@ st.markdown("""
         border: 2px solid #1b4d3e;
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 4px 15px rgba(27, 77, 62, 0.3);
         width: 100%;
         max-width: 600px;
         min-width: 450px;
@@ -140,12 +176,11 @@ st.markdown("""
         font-size: 14px;
         font-weight: bold;
         color: #2e8b57;
-        margin-top: 8px;
-        margin-bottom: 15px;
+        margin-top: 15px;
         width: 100%;
     }
 
-    /* إعدادات البرواز وإخفاء العناصر عند الطباعة */
+    /* إعدادات الطباعة لإخفاء عناصر التحكم الزائدة وجعل الإطار يملأ صفحة الطباعة */
     @media print {
         body { 
             background: white !important; 
@@ -161,39 +196,9 @@ st.markdown("""
             border: 4px solid #1b4d3e !important;
             border-radius: 15px !important;
             padding: 20px !important;
-            margin: 5px auto !important;
-            max-width: 700px !important;
-            background-color: #ffffff !important;
+            margin: 0 auto !important;
+            max-width: 100% !important;
             box-shadow: none !important;
-        }
-        
-        .print-header-title {
-            font-family: 'Amiri', serif !important;
-            text-align: center !important;
-            color: #2e8b57 !important;
-            font-size: 28px !important;
-            font-weight: bold !important;
-            display: block !important;
-            margin-bottom: 0px !important;
-        }
-        
-        .print-header-subtitle {
-            text-align: center !important;
-            color: #d4af37 !important;
-            font-size: 18px !important;
-            font-weight: bold !important;
-            display: block !important;
-            margin-bottom: 10px !important;
-        }
-
-        .print-ayah {
-            text-align: center !important;
-            color: #2e8b57 !important;
-            font-family: 'Amiri', serif !important;
-            font-weight: bold !important;
-            font-size: 15px !important;
-            display: block !important;
-            margin-bottom: 15px !important;
         }
 
         .watermark {
@@ -212,7 +217,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# العناوين في الموقع العادي
+# العناوين الرئيسية في الموقع
 st.markdown("<h1 class='main-title'>نتيجة الفرقة الإعدادية</h1>", unsafe_allow_html=True)
 st.markdown("<h3 class='sub-title'>الترم الاول 2026</h3>", unsafe_allow_html=True)
 
@@ -272,7 +277,7 @@ if show_button:
                 personal_info = {k: student_data.get(k, "") for k in base_keys if k in student_data or k in df.columns}
                 subjects_info = {k: v for k, v in student_data.items() if k not in base_keys and k != seat_col}
                 
-                # بناء الجدول مع تفعيل العرض السليم بالـ HTML
+                # بناء صفوف الجدول بنسق HTML سليم ونظيف
                 rows_html = ""
                 for k, v in personal_info.items():
                     if k:
@@ -289,7 +294,7 @@ if show_button:
                     if k:
                         rows_html += f"<tr><td><b>{k}</b></td><td>{v}</td></tr>"
 
-                # تجميع القالب كاملاً داخل الـ wrapper الخاص بالطباعة والبرواز
+                # تجميع القالب كاملًا داخل حاوية الإطار المعتمدة
                 complete_html = f"""
                 <div class="print-page-wrapper">
                     <div class="watermark">نتيجة الفرقة الإعدادية - الترم الاول 2026</div>
@@ -316,7 +321,7 @@ if show_button:
                 
                 st.markdown(complete_html, unsafe_allow_html=True)
                 
-                # زر الطباعة
+                # زر الطباعة البرمجي
                 print_button_code = """
                 <div style="text-align: center; margin-top: 15px;">
                     <button onclick="parent.window.print();" style="background-color: #2e8b57; color: white; padding: 12px 35px; border: 2px solid #d4af37; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Cairo', sans-serif;">
