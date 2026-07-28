@@ -10,7 +10,7 @@ def load_data():
 
 df = load_data()
 
-# التصميم الأكاديمي وتنسيق الإطار والطباعة
+# تصميم الموقع العام
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap');
@@ -67,157 +67,10 @@ st.markdown("""
         background-color: #14382d;
         color: #ffd700;
     }
-    
-    /* تصميم الإطار المحيط بالنتيجة في الموقع والطباعة */
-    .print-page-wrapper {
-        border: 3px solid #1b4d3e;
-        border-radius: 15px;
-        padding: 25px;
-        margin: 20px auto;
-        max-width: 650px;
-        background-color: #ffffff;
-        box-shadow: 0 4px 20px rgba(27, 77, 62, 0.15);
-    }
-
-    .print-header-title {
-        font-family: 'Amiri', serif;
-        text-align: center;
-        color: #2e8b57;
-        font-size: 32px;
-        font-weight: bold;
-        margin-bottom: 0px;
-    }
-    
-    .print-header-subtitle {
-        text-align: center;
-        color: #d4af37;
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .print-ayah {
-        text-align: center;
-        color: #2e8b57;
-        font-family: 'Amiri', serif;
-        font-weight: bold;
-        font-size: 17px;
-        margin-bottom: 20px;
-    }
-
-    .table-container {
-        width: 100%;
-        overflow-x: auto;
-        display: flex;
-        justify-content: center;
-        margin-top: 10px;
-        margin-bottom: 15px;
-        padding-bottom: 5px;
-    }
-    
-    .styled-table {
-        direction: rtl;
-        border-collapse: separate;
-        border-spacing: 0;
-        font-size: 16px;
-        background-color: #ffffff;
-        color: #000000;
-        border: 2px solid #1b4d3e;
-        border-radius: 12px;
-        overflow: hidden;
-        width: 100%;
-        max-width: 600px;
-        min-width: 450px;
-    }
-    
-    .styled-table th {
-        background-color: #1b4d3e;
-        color: #ffffff;
-        padding: 12px 15px;
-        font-size: 18px;
-        border-bottom: 2px solid #1b4d3e;
-        border-right: 2px solid #b8860b;
-    }
-    .styled-table th:first-child {
-        border-right: none;
-    }
-    
-    .styled-table td {
-        padding: 10px 15px;
-        border-bottom: 1px solid #e0e0e0;
-        border-right: 2px solid #1b4d3e;
-        color: #000000;
-        font-weight: bold;
-    }
-    .styled-table tr td:first-child {
-        border-right: none;
-    }
-    .styled-table tbody tr:last-child td {
-        border-bottom: none;
-    }
-    
-    .styled-table td:nth-child(1), .styled-table th:nth-child(1) { 
-        text-align: right; 
-        padding-right: 15px; 
-        width: 45%;
-        white-space: nowrap;
-    }
-    .styled-table td:nth-child(2), .styled-table th:nth-child(2) { 
-        text-align: right; 
-        padding-right: 20px; 
-        width: 55%;
-    }
-    
-    .styled-table tbody tr:nth-of-type(even) { background-color: #faf9f6; }
-    .styled-table tbody tr:nth-of-type(odd) { background-color: #ffffff; }
-
-    .designer-credit {
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        color: #2e8b57;
-        margin-top: 15px;
-        width: 100%;
-    }
-
-    /* إعدادات الطباعة لإخفاء عناصر التحكم الزائدة وجعل الإطار يملأ صفحة الطباعة */
-    @media print {
-        body { 
-            background: white !important; 
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-        
-        .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"], div[data-testid="stSuccess"] {
-            display: none !important;
-        }
-        
-        .print-page-wrapper {
-            border: 4px solid #1b4d3e !important;
-            border-radius: 15px !important;
-            padding: 20px !important;
-            margin: 0 auto !important;
-            max-width: 100% !important;
-            box-shadow: none !important;
-        }
-
-        .watermark {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 50px;
-            color: rgba(27, 77, 62, 0.04);
-            z-index: 9999;
-            pointer-events: none;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-    }
     </style>
 """, unsafe_allow_html=True)
 
-# العناوين الرئيسية في الموقع
+# العناوين الرئيسية
 st.markdown("<h1 class='main-title'>نتيجة الفرقة الإعدادية</h1>", unsafe_allow_html=True)
 st.markdown("<h3 class='sub-title'>الترم الاول 2026</h3>", unsafe_allow_html=True)
 
@@ -277,7 +130,7 @@ if show_button:
                 personal_info = {k: student_data.get(k, "") for k in base_keys if k in student_data or k in df.columns}
                 subjects_info = {k: v for k, v in student_data.items() if k not in base_keys and k != seat_col}
                 
-                # بناء صفوف الجدول بنسق HTML سليم ونظيف
+                # بناء صفوف الجدول
                 rows_html = ""
                 for k, v in personal_info.items():
                     if k:
@@ -294,42 +147,167 @@ if show_button:
                     if k:
                         rows_html += f"<tr><td><b>{k}</b></td><td>{v}</td></tr>"
 
-                # تجميع القالب كاملًا داخل حاوية الإطار المعتمدة
-                complete_html = f"""
-                <div class="print-page-wrapper">
-                    <div class="watermark">نتيجة الفرقة الإعدادية - الترم الاول 2026</div>
-                    <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
-                    <div class="print-header-subtitle">الترم الاول 2026</div>
-                    <div class="print-ayah">قل لن يصيبنا إلا ما كتب الله لنا</div>
-                    
-                    <div class="table-container">
-                        <table class='styled-table'>
-                            <thead>
-                                <tr>
-                                    <th>بيانات الطالب</th>
-                                    <th>النتيجة</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {rows_html}
-                            </tbody>
-                        </table>
+                # قالب HTML المتكامل مع الإطار والجدول والطباعة
+                full_card_html = f"""
+                <!DOCTYPE html>
+                <html lang="ar" dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+                    <style>
+                        body {{
+                            font-family: 'Cairo', sans-serif;
+                            background-color: transparent;
+                            margin: 0;
+                            padding: 10px;
+                        }}
+                        .print-page-wrapper {{
+                            border: 3px solid #1b4d3e;
+                            border-radius: 15px;
+                            padding: 20px;
+                            margin: 0 auto;
+                            max-width: 600px;
+                            background-color: #ffffff;
+                            box-shadow: 0 4px 15px rgba(27, 77, 62, 0.15);
+                            position: relative;
+                        }}
+                        .print-header-title {{
+                            font-family: 'Amiri', serif;
+                            text-align: center;
+                            color: #2e8b57;
+                            font-size: 28px;
+                            font-weight: bold;
+                            margin-bottom: 0px;
+                        }}
+                        .print-header-subtitle {{
+                            text-align: center;
+                            color: #d4af37;
+                            font-size: 18px;
+                            font-weight: bold;
+                            margin-bottom: 8px;
+                        }}
+                        .print-ayah {{
+                            text-align: center;
+                            color: #2e8b57;
+                            font-family: 'Amiri', serif;
+                            font-weight: bold;
+                            font-size: 16px;
+                            margin-bottom: 15px;
+                        }}
+                        .table-container {{
+                            width: 100%;
+                            overflow-x: auto;
+                            display: flex;
+                            justify-content: center;
+                            margin-bottom: 10px;
+                        }}
+                        .styled-table {{
+                            direction: rtl;
+                            border-collapse: separate;
+                            border-spacing: 0;
+                            font-size: 15px;
+                            background-color: #ffffff;
+                            color: #000000;
+                            border: 2px solid #1b4d3e;
+                            border-radius: 10px;
+                            overflow: hidden;
+                            width: 100%;
+                        }}
+                        .styled-table th {{
+                            background-color: #1b4d3e;
+                            color: #ffffff;
+                            padding: 10px 12px;
+                            font-size: 16px;
+                            border-bottom: 2px solid #1b4d3e;
+                            border-right: 2px solid #b8860b;
+                        }}
+                        .styled-table th:first-child {{
+                            border-right: none;
+                        }}
+                        .styled-table td {{
+                            padding: 8px 12px;
+                            border-bottom: 1px solid #e0e0e0;
+                            border-right: 2px solid #1b4d3e;
+                            color: #000000;
+                            font-weight: bold;
+                        }}
+                        .styled-table tr td:first-child {{
+                            border-right: none;
+                        }}
+                        .styled-table tbody tr:last-child td {{
+                            border-bottom: none;
+                        }}
+                        .styled-table td:nth-child(1), .styled-table th:nth-child(1) {{ 
+                            text-align: right; 
+                            width: 45%;
+                            white-space: nowrap;
+                        }}
+                        .styled-table td:nth-child(2), .styled-table th:nth-child(2) {{ 
+                            text-align: right; 
+                            width: 55%;
+                        }}
+                        .styled-table tbody tr:nth-of-type(even) {{ background-color: #faf9f6; }}
+                        .styled-table tbody tr:nth-of-type(odd) {{ background-color: #ffffff; }}
+                        
+                        .designer-credit {{
+                            text-align: center;
+                            font-size: 13px;
+                            font-weight: bold;
+                            color: #2e8b57;
+                            margin-top: 12px;
+                        }}
+                        .watermark {{
+                            position: fixed;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%) rotate(-30deg);
+                            font-size: 45px;
+                            color: rgba(27, 77, 62, 0.03);
+                            z-index: 9999;
+                            pointer-events: none;
+                            font-weight: bold;
+                            white-space: nowrap;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class="print-page-wrapper">
+                        <div class="watermark">نتيجة الفرقة الإعدادية - الترم الاول 2026</div>
+                        <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
+                        <div class="print-header-subtitle">الترم الاول 2026</div>
+                        <div class="print-ayah">قل لن يصيبنا إلا ما كتب الله لنا</div>
+                        
+                        <div class="table-container">
+                            <table class='styled-table'>
+                                <thead>
+                                    <tr>
+                                        <th>بيانات الطالب</th>
+                                        <th>النتيجة</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {rows_html}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
                     </div>
-                    <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
-                </div>
+                </body>
+                </html>
                 """
                 
-                st.markdown(complete_html, unsafe_allow_html=True)
+                # عرض النتيجة والإطار بشكل احترافي مظبوط الارتفاع
+                components.html(full_card_html, height=550, scrolling=True)
                 
-                # زر الطباعة البرمجي
+                # زر الطباعة المنفصل
                 print_button_code = """
-                <div style="text-align: center; margin-top: 15px;">
+                <div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
                     <button onclick="parent.window.print();" style="background-color: #2e8b57; color: white; padding: 12px 35px; border: 2px solid #d4af37; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Cairo', sans-serif;">
                         🖨️ طباعة النتيجة
                     </button>
                 </div>
                 """
-                components.html(print_button_code, height=70)
+                components.html(print_button_code, height=75)
                 
             else:
                 st.error("رقم الجلوس غير موجود، تأكد من الرقم وادخله مرة أخرى.")
