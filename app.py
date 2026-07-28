@@ -98,24 +98,24 @@ if show_button:
                         .print-header-subtitle {{ text-align: center; color: #d4af37; font-size: 17px; font-weight: bold; margin-bottom: 6px; position: relative; z-index: 2; }}
                         .print-ayah {{ text-align: center; color: #2e8b57; font-family: 'Amiri', serif; font-weight: bold; font-size: 15px; margin-bottom: 12px; position: relative; z-index: 2; }}
                         .table-container {{ width: 100%; display: flex; justify-content: center; margin-bottom: 10px; position: relative; z-index: 2; }}
-                        .styled-table {{ direction: rtl; border-collapse: separate; border-spacing: 0; font-size: 15px; background-color: rgba(255, 255, 255, 0.95); color: #000000; border: 2px solid #1b4d3e; border-radius: 10px; overflow: hidden; width: 100%; }}
+                        .styled-table {{ direction: rtl; border-collapse: separate; border-spacing: 0; font-size: 15px; background-color: rgba(255, 255, 255, 0.92); color: #000000; border: 2px solid #1b4d3e; border-radius: 10px; overflow: hidden; width: 100%; }}
                         .styled-table th {{ background-color: #1b4d3e; color: #ffffff; padding: 10px 12px; font-size: 16px; border-bottom: 2px solid #1b4d3e; border-right: 2px solid #b8860b; }}
                         .styled-table th:first-child {{ border-right: none; }}
                         .styled-table td {{ padding: 8px 12px; border-bottom: 1px solid #e0e0e0; border-right: 2px solid #1b4d3e; color: #000000; font-weight: bold; }}
                         .styled-table tr td:first-child {{ border-right: none; }}
                         .styled-table td:nth-child(1), .styled-table th:nth-child(1) {{ text-align: right; width: 45%; white-space: nowrap; }}
                         .styled-table td:nth-child(2), .styled-table th:nth-child(2) {{ text-align: right; width: 55%; }}
-                        .styled-table tbody tr:nth-of-type(even) {{ background-color: rgba(250, 249, 246, 0.95); }}
+                        .styled-table tbody tr:nth-of-type(even) {{ background-color: rgba(250, 249, 246, 0.92); }}
                         .designer-credit {{ text-align: center; font-size: 13px; font-weight: bold; color: #2e8b57; margin-top: 12px; position: relative; z-index: 2; }}
                         
-                        /* العلامة المائية للوجو */
+                        /* العلامة المائية في المنتصف وأمام الخلفية ولكن شفافة وواضحة */
                         .watermark-logo {{ 
                             position: absolute; 
-                            top: 50%; 
+                            top: 55%; 
                             left: 50%; 
                             transform: translate(-50%, -50%); 
-                            width: 280px; 
-                            opacity: 0.06; 
+                            width: 340px; 
+                            opacity: 0.12; 
                             z-index: 1; 
                             pointer-events: none; 
                         }}
@@ -143,6 +143,7 @@ if show_button:
                                 box-shadow: none !important;
                                 margin: 0 !important;
                             }}
+                            .watermark-logo {{ opacity: 0.12 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
                             .styled-table th {{ background-color: #1b4d3e !important; color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
                         }}
                     </style>
