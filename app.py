@@ -12,16 +12,21 @@ def load_data():
 
 df = load_data()
 
-# دالة لتحويل صورة اللوجو إلى Base64 عشان تتضمن جوه الـ HTML وتظهر في الطباعة بكل سهولة
-def get_image_base64(path):
-    if os.path.exists(path):
-        with open(path, "rb") as f:
-            data = f.read()
-        return base64.b64encode(data).decode()
-    return ""
+# دالة آمنة لقراءة اللوجو من داخل مجلد static
+def get_image_base64():
+    for ext in ["jpg", "jpeg", "png"]:
+        path = f"static/logo.{ext}"
+        if os.path.exists(path):
+            with open(path, "rb") as f:
+                data = f.read()
+            return base64.b64encode(data).decode(), ext
+    return "", ""
 
-logo_base64 = get_image_base64("logo.png")
-logo_img_tag = f'<img src="data:image/png;base64,{logo_base64}" style="max-height: 80px; margin-bottom: 5px;" alt="شعار الكلية">' if logo_base64 else ""
+logo_data, logo_ext = get_image_base64()
+if logo_data:
+    logo_img_tag = f'<img src="data:image/{logo_ext};base64,{logo_data}" style="max-height: 75px; margin-bottom: 5px;" alt="شعار الكلية">'
+else:
+    logo_img_tag = '<div style="font-size: 35px; color: #1b4d3e; margin-bottom: 5px;">🏛️</div>'
 
 # تصميم الموقع العام
 st.markdown("""
@@ -160,7 +165,7 @@ if show_button:
                     if k:
                         rows_html += f"<tr><td><b>{k}</b></td><td>{v}</td></tr>"
 
-                # قالب HTML المتكامل مع اللوجو والإطار والجدول والطباعة
+                # قالب HTML المتكامل
                 full_card_html = f"""
                 <!DOCTYPE html>
                 <html lang="ar" dir="rtl">
@@ -316,10 +321,8 @@ if show_button:
                 </html>
                 """
                 
-                # عرض البطاقة والنتيجة
                 components.html(full_card_html, height=600, scrolling=True)
                 
-                # زر الطباعة
                 print_button_code = """
                 <div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
                     <button onclick="parent.window.print();" style="background-color: #2e8b57; color: white; padding: 12px 35px; border: 2px solid #d4af37; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Cairo', sans-serif;">
