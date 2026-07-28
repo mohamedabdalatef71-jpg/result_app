@@ -108,10 +108,10 @@ if show_button:
                         .styled-table tbody tr:nth-of-type(even) {{ background-color: rgba(250, 249, 246, 0.95); }}
                         .designer-credit {{ text-align: center; font-size: 13px; font-weight: bold; color: #2e8b57; margin-top: 12px; position: relative; z-index: 2; }}
                         
-                        /* العلامة المائية أصبحت أمام الكلام وفوق الجدول وبشفافية خفيفة جداً وبدون خلفية بيضاء */
+                        /* العلامة المائية مضبوطة في منتصف الجدول بالضبط وأمام الكلام وبشفافية خفيفة */
                         .watermark-logo {{ 
                             position: absolute; 
-                            top: 50%; 
+                            top: 67%; 
                             left: 50%; 
                             transform: translate(-50%, -50%); 
                             width: 390px; 
@@ -158,7 +158,7 @@ if show_button:
                 </head>
                 <body>
                     <div class="print-page-wrapper">
-                        <!-- العلامة المائية بقت قدام فوق كل العناصر وبشكل خفيف جداً -->
+                        <!-- العلامة المائية في منتصف الجدول تماماً -->
                         <img src="{LOGO_URL}" class="watermark-logo" alt="Watermark">
                         
                         <div style="margin-bottom: 5px; text-align: right; position: relative; z-index: 2;">{logo_img_tag}</div>
