@@ -10,7 +10,7 @@ def load_data():
 
 df = load_data()
 
-# تصميم أكاديمي مع إضافة برواز فخم لصفحة الطباعة
+# تصميم أكاديمي وتنسيق صفحة الطباعة والإطار الفخم
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap');
@@ -145,38 +145,35 @@ st.markdown("""
         width: 100%;
     }
 
-    /* إعدادات الطباعة وإضافة الإطار المحيط بصفحة الطباعة بالكامل */
+    /* إعدادات البرواز وإخفاء العناصر عند الطباعة */
     @media print {
         body { 
             background: white !important; 
             margin: 0 !important;
-            padding: 10px !important;
+            padding: 0 !important;
         }
         
-        /* إخفاء عناصر الموقع غير المرغوب فيها أثناء الطباعة */
         .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"], div[data-testid="stSuccess"] {
             display: none !important;
         }
         
-        /* إضافة برواز خارجي يحيط بصفحة الطباعة بالكامل مع مسافة داخلية مريحة */
         .print-page-wrapper {
-            border: 3px solid #1b4d3e !important;
+            border: 4px solid #1b4d3e !important;
             border-radius: 15px !important;
-            padding: 25px !important;
-            margin: 10px auto !important;
+            padding: 20px !important;
+            margin: 5px auto !important;
             max-width: 700px !important;
             background-color: #ffffff !important;
-            position: relative;
             box-shadow: none !important;
         }
         
-        /* تنسيق العناوين داخل ورقة الطباعة المؤطرة */
         .print-header-title {
             font-family: 'Amiri', serif !important;
             text-align: center !important;
             color: #2e8b57 !important;
-            font-size: 30px !important;
+            font-size: 28px !important;
             font-weight: bold !important;
+            display: block !important;
             margin-bottom: 0px !important;
         }
         
@@ -185,7 +182,8 @@ st.markdown("""
             color: #d4af37 !important;
             font-size: 18px !important;
             font-weight: bold !important;
-            margin-bottom: 15px !important;
+            display: block !important;
+            margin-bottom: 10px !important;
         }
 
         .print-ayah {
@@ -193,7 +191,8 @@ st.markdown("""
             color: #2e8b57 !important;
             font-family: 'Amiri', serif !important;
             font-weight: bold !important;
-            font-size: 16px !important;
+            font-size: 15px !important;
+            display: block !important;
             margin-bottom: 15px !important;
         }
 
@@ -202,7 +201,7 @@ st.markdown("""
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 60px;
+            font-size: 50px;
             color: rgba(27, 77, 62, 0.04);
             z-index: 9999;
             pointer-events: none;
@@ -273,13 +272,30 @@ if show_button:
                 personal_info = {k: student_data.get(k, "") for k in base_keys if k in student_data or k in df.columns}
                 subjects_info = {k: v for k, v in student_data.items() if k not in base_keys and k != seat_col}
                 
-                # بناء هيكل النتيجة بحيث يظهر داخل البرواز عند الطباعة
-                table_html = f"""
+                # بناء الجدول مع تفعيل العرض السليم بالـ HTML
+                rows_html = ""
+                for k, v in personal_info.items():
+                    if k:
+                        rows_html += f"<tr><td><b>{k}</b></td><td>{v}</td></tr>"
+                
+                rows_html += f"""
+                    <tr>
+                        <th style="background-color: #1b4d3e; color: white; text-align: right; padding: 12px 15px; white-space: nowrap;">المواد</th>
+                        <th style="background-color: #1b4d3e; color: white; text-align: right; padding: 12px 15px; border-right: 2px solid #b8860b;">التقديرات / الدرجات</th>
+                    </tr>
+                """
+                
+                for k, v in subjects_info.items():
+                    if k:
+                        rows_html += f"<tr><td><b>{k}</b></td><td>{v}</td></tr>"
+
+                # تجميع القالب كاملاً داخل الـ wrapper الخاص بالطباعة والبرواز
+                complete_html = f"""
                 <div class="print-page-wrapper">
                     <div class="watermark">نتيجة الفرقة الإعدادية - الترم الاول 2026</div>
-                    <div class="print-header-title" style="display:none;">نتيجة الفرقة الإعدادية</div>
-                    <div class="print-header-subtitle" style="display:none;">الترم الاول 2026</div>
-                    <div class="print-ayah" style="display:none;">قل لن يصيبنا إلا ما كتب الله لنا</div>
+                    <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
+                    <div class="print-header-subtitle">الترم الاول 2026</div>
+                    <div class="print-ayah">قل لن يصيبنا إلا ما كتب الله لنا</div>
                     
                     <div class="table-container">
                         <table class='styled-table'>
@@ -290,24 +306,7 @@ if show_button:
                                 </tr>
                             </thead>
                             <tbody>
-                """
-                
-                for k, v in personal_info.items():
-                    if k:
-                        table_html += f"<tr><td><b>{k}</b></td><td>{v}</td></tr>"
-                
-                table_html += f"""
-                            <tr>
-                                <th style="background-color: #1b4d3e; color: white; text-align: right; padding: 12px 15px; white-space: nowrap;">المواد</th>
-                                <th style="background-color: #1b4d3e; color: white; text-align: right; padding: 12px 15px; border-right: 2px solid #b8860b;">التقديرات / الدرجات</th>
-                            </tr>
-                """
-                
-                for k, v in subjects_info.items():
-                    if k:
-                        table_html += f"<tr><td><b>{k}</b></td><td>{v}</td></tr>"
-                
-                table_html += f"""
+                                {rows_html}
                             </tbody>
                         </table>
                     </div>
@@ -315,7 +314,7 @@ if show_button:
                 </div>
                 """
                 
-                st.markdown(table_html, unsafe_allow_html=True)
+                st.markdown(complete_html, unsafe_allow_html=True)
                 
                 # زر الطباعة
                 print_button_code = """
