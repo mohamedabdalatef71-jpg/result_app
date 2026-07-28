@@ -12,7 +12,6 @@ def load_data():
 
 df = load_data()
 
-# دالة آمنة لقراءة اللوجو من داخل مجلد static
 def get_image_base64():
     for ext in ["jpg", "jpeg", "png"]:
         path = f"static/logo.{ext}"
@@ -24,11 +23,10 @@ def get_image_base64():
 
 logo_data, logo_ext = get_image_base64()
 if logo_data:
-    logo_img_tag = f'<img src="data:image/{logo_ext};base64,{logo_data}" style="max-height: 75px; margin-bottom: 5px;" alt="شعار الكلية">'
+    logo_img_tag = f'<img src="data:image/{logo_ext};base64,{logo_data}" style="max-height: 75px; margin-bottom: 5px; display: block; margin-left: auto; margin-right: auto;" alt="شعار الكلية">'
 else:
     logo_img_tag = '<div style="font-size: 35px; color: #1b4d3e; margin-bottom: 5px;">🏛️</div>'
 
-# تصميم الموقع العام
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap');
@@ -88,7 +86,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# العناوين الرئيسية في الموقع
 st.markdown("<h1 class='main-title'>نتيجة الفرقة الإعدادية</h1>", unsafe_allow_html=True)
 st.markdown("<h3 class='sub-title'>الترم الاول 2026</h3>", unsafe_allow_html=True)
 
@@ -148,7 +145,6 @@ if show_button:
                 personal_info = {k: student_data.get(k, "") for k in base_keys if k in student_data or k in df.columns}
                 subjects_info = {k: v for k, v in student_data.items() if k not in base_keys and k != seat_col}
                 
-                # بناء صفوف الجدول
                 rows_html = ""
                 for k, v in personal_info.items():
                     if k:
@@ -165,7 +161,6 @@ if show_button:
                     if k:
                         rows_html += f"<tr><td><b>{k}</b></td><td>{v}</td></tr>"
 
-                # قالب HTML المتكامل
                 full_card_html = f"""
                 <!DOCTYPE html>
                 <html lang="ar" dir="rtl">
@@ -192,6 +187,7 @@ if show_button:
                         }}
                         .logo-container {{
                             margin-bottom: 5px;
+                            text-align: center;
                         }}
                         .print-header-title {{
                             font-family: 'Amiri', serif;
@@ -290,6 +286,28 @@ if show_button:
                             font-weight: bold;
                             white-space: nowrap;
                         }}
+                        
+                        /* إعدادات خاصة بالطباعة لتجنب الفراغات وظهور الصور الخلفية والألوان */
+                        @media print {{
+                            body {{
+                                background-color: #ffffff;
+                                -webkit-print-color-adjust: exact;
+                                print-color-adjust: exact;
+                            }}
+                            .print-page-wrapper {{
+                                border: 3px solid #1b4d3e !important;
+                                box-shadow: none !important;
+                                margin: 0 auto !important;
+                                width: 100% !important;
+                                max-width: 100% !important;
+                            }}
+                            .styled-table th {{
+                                background-color: #1b4d3e !important;
+                                color: #ffffff !important;
+                                -webkit-print-color-adjust: exact;
+                                print-color-adjust: exact;
+                            }}
+                        }}
                     </style>
                 </head>
                 <body>
@@ -321,10 +339,18 @@ if show_button:
                 </html>
                 """
                 
-                components.html(full_card_html, height=600, scrolling=True)
+                components.html(full_card_html, height=650, scrolling=True)
                 
+                # زر طباعة منفصل مع كود يمنع ظهوره في الطباعة الفعلية
                 print_button_code = """
-                <div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+                <style>
+                @media print {
+                    .no-print {
+                        display: none !important;
+                    }
+                }
+                </style>
+                <div class="no-print" style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
                     <button onclick="parent.window.print();" style="background-color: #2e8b57; color: white; padding: 12px 35px; border: 2px solid #d4af37; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Cairo', sans-serif;">
                         🖨️ طباعة النتيجة
                     </button>
