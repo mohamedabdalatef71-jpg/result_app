@@ -13,8 +13,7 @@ df = load_data()
 LOGO_URL = "https://raw.githubusercontent.com/mohamedabdalatef71-jpg/result_app/ff737f289e52d0456b3202bf07a2d512ebb33d92/logo.jpg"
 
 if LOGO_URL:
-    # حطينالها خصائص CSS قوية لإزالة الخلفية البيضاء نهائياً ودمجها بصفاء
-    logo_img_tag = f'<img src="{LOGO_URL}" style="max-height: 85px; margin-bottom: 5px; display: block; margin-right: 0; margin-left: auto; mix-blend-mode: multiply; filter: contrast(120%);" alt="شعار الكلية">'
+    logo_img_tag = f'<img src="{LOGO_URL}" style="max-height: 75px; margin-bottom: 5px; display: block; margin-right: 0; margin-left: auto; mix-blend-mode: multiply;" alt="شعار الكلية">'
 else:
     logo_img_tag = '<div style="font-size: 35px; color: #1b4d3e; margin-bottom: 5px;">🏛️</div>'
 
@@ -92,30 +91,35 @@ if show_button:
                             background-color: #ffffff; 
                             position: relative; 
                             text-align: center; 
-                            box-sizing: border-box;
+                    box-sizing: border-box;
+                            overflow: hidden;
                         }}
-                        .print-header-title {{ font-family: 'Amiri', serif; text-align: center; color: #2e8b57; font-size: 26px; font-weight: bold; margin-bottom: 0px; }}
-                        .print-header-subtitle {{ text-align: center; color: #d4af37; font-size: 17px; font-weight: bold; margin-bottom: 6px; }}
-                        .print-ayah {{ text-align: center; color: #2e8b57; font-family: 'Amiri', serif; font-weight: bold; font-size: 15px; margin-bottom: 12px; }}
-                        .table-container {{ width: 100%; display: flex; justify-content: center; margin-bottom: 10px; }}
-                        .styled-table {{ direction: rtl; border-collapse: separate; border-spacing: 0; font-size: 15px; background-color: #ffffff; color: #000000; border: 2px solid #1b4d3e; border-radius: 10px; overflow: hidden; width: 100%; }}
+                        .print-header-title {{ font-family: 'Amiri', serif; text-align: center; color: #2e8b57; font-size: 26px; font-weight: bold; margin-bottom: 0px; position: relative; z-index: 2; }}
+                        .print-header-subtitle {{ text-align: center; color: #d4af37; font-size: 17px; font-weight: bold; margin-bottom: 6px; position: relative; z-index: 2; }}
+                        .print-ayah {{ text-align: center; color: #2e8b57; font-family: 'Amiri', serif; font-weight: bold; font-size: 15px; margin-bottom: 12px; position: relative; z-index: 2; }}
+                        .table-container {{ width: 100%; display: flex; justify-content: center; margin-bottom: 10px; position: relative; z-index: 2; }}
+                        .styled-table {{ direction: rtl; border-collapse: separate; border-spacing: 0; font-size: 15px; background-color: rgba(255, 255, 255, 0.95); color: #000000; border: 2px solid #1b4d3e; border-radius: 10px; overflow: hidden; width: 100%; }}
                         .styled-table th {{ background-color: #1b4d3e; color: #ffffff; padding: 10px 12px; font-size: 16px; border-bottom: 2px solid #1b4d3e; border-right: 2px solid #b8860b; }}
                         .styled-table th:first-child {{ border-right: none; }}
                         .styled-table td {{ padding: 8px 12px; border-bottom: 1px solid #e0e0e0; border-right: 2px solid #1b4d3e; color: #000000; font-weight: bold; }}
                         .styled-table tr td:first-child {{ border-right: none; }}
                         .styled-table td:nth-child(1), .styled-table th:nth-child(1) {{ text-align: right; width: 45%; white-space: nowrap; }}
                         .styled-table td:nth-child(2), .styled-table th:nth-child(2) {{ text-align: right; width: 55%; }}
-                        .styled-table tbody tr:nth-of-type(even) {{ background-color: #faf9f6; }}
-                        .designer-credit {{ text-align: center; font-size: 13px; font-weight: bold; color: #2e8b57; margin-top: 12px; }}
+                        .styled-table tbody tr:nth-of-type(even) {{ background-color: rgba(250, 249, 246, 0.95); }}
+                        .designer-credit {{ text-align: center; font-size: 13px; font-weight: bold; color: #2e8b57; margin-top: 12px; position: relative; z-index: 2; }}
                         
-                        /* إزالة الخلفية البيضاء من اللوجو تماماً وجعله شفافاً ومدمجاً بشكل احترافي */
-                        .clean-logo {{
-                            max-height: 85px;
-                            margin-bottom: 5px;
-                            display: block;
-                            margin-right: 0;
-                            margin-left: auto;
+                        /* العلامة المائية في منتصف الجدول وبدون خلفية بيضاء (إزالة المربع الأبيض بالكامل) */
+                        .watermark-logo {{ 
+                            position: absolute; 
+                            top: 55%; 
+                            left: 50%; 
+                            transform: translate(-50%, -50%); 
+                            width: 370px; 
+                            opacity: 0.14; 
+                            z-index: 1; 
+                            pointer-events: none; 
                             mix-blend-mode: multiply;
+                            filter: contrast(140%) brightness(105%);
                         }}
                         
                         .print-btn-container {{ margin-top: 20px; text-align: center; width: 100%; }}
@@ -141,17 +145,22 @@ if show_button:
                                 box-shadow: none !important;
                                 margin: 0 !important;
                             }}
-                            .clean-logo {{ mix-blend-mode: multiply !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
+                            .watermark-logo {{ 
+                                opacity: 0.14 !important; 
+                                mix-blend-mode: multiply !important;
+                                -webkit-print-color-adjust: exact; 
+                                print-color-adjust: exact; 
+                            }}
                             .styled-table th {{ background-color: #1b4d3e !important; color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
                         }}
                     </style>
                 </head>
                 <body>
                     <div class="print-page-wrapper">
-                        <!-- اللوجو ظاهر في مكانه وبدون أي خلفية بيضاء مزعجة -->
-                        <div style="margin-bottom: 5px; text-align: right;">
-                            <img src="{LOGO_URL}" class="clean-logo" alt="شعار الكلية">
-                        </div>
+                        <!-- العلامة المائية في المنتصف وبدون خلفية بيضاء -->
+                        <img src="{LOGO_URL}" class="watermark-logo" alt="Watermark">
+                        
+                        <div style="margin-bottom: 5px; text-align: right; position: relative; z-index: 2;">{logo_img_tag}</div>
                         <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
                         <div class="print-header-subtitle">الترم الاول 2026</div>
                         <div class="print-ayah">قل لن يصيبنا إلا ما كتب الله لنا</div>
