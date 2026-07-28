@@ -94,29 +94,29 @@ if show_button:
                             box-sizing: border-box;
                             overflow: hidden;
                         }}
-                        .print-header-title {{ font-family: 'Amiri', serif; text-align: center; color: #2e8b57; font-size: 26px; font-weight: bold; margin-bottom: 0px; position: relative; z-index: 2; }}
-                        .print-header-subtitle {{ text-align: center; color: #d4af37; font-size: 17px; font-weight: bold; margin-bottom: 6px; position: relative; z-index: 2; }}
-                        .print-ayah {{ text-align: center; color: #2e8b57; font-family: 'Amiri', serif; font-weight: bold; font-size: 15px; margin-bottom: 12px; position: relative; z-index: 2; }}
-                        .table-container {{ width: 100%; display: flex; justify-content: center; margin-bottom: 10px; position: relative; z-index: 2; }}
-                        .styled-table {{ direction: rtl; border-collapse: separate; border-spacing: 0; font-size: 15px; background-color: rgba(255, 255, 255, 0.92); color: #000000; border: 2px solid #1b4d3e; border-radius: 10px; overflow: hidden; width: 100%; }}
+                        .print-header-title {{ font-family: 'Amiri', serif; text-align: center; color: #2e8b57; font-size: 26px; font-weight: bold; margin-bottom: 0px; }}
+                        .print-header-subtitle {{ text-align: center; color: #d4af37; font-size: 17px; font-weight: bold; margin-bottom: 6px; }}
+                        .print-ayah {{ text-align: center; color: #2e8b57; font-family: 'Amiri', serif; font-weight: bold; font-size: 15px; margin-bottom: 12px; }}
+                        .table-container {{ width: 100%; display: flex; justify-content: center; margin-bottom: 10px; }}
+                        .styled-table {{ direction: rtl; border-collapse: separate; border-spacing: 0; font-size: 15px; background-color: #ffffff; color: #000000; border: 2px solid #1b4d3e; border-radius: 10px; overflow: hidden; width: 100%; }}
                         .styled-table th {{ background-color: #1b4d3e; color: #ffffff; padding: 10px 12px; font-size: 16px; border-bottom: 2px solid #1b4d3e; border-right: 2px solid #b8860b; }}
                         .styled-table th:first-child {{ border-right: none; }}
                         .styled-table td {{ padding: 8px 12px; border-bottom: 1px solid #e0e0e0; border-right: 2px solid #1b4d3e; color: #000000; font-weight: bold; }}
                         .styled-table tr td:first-child {{ border-right: none; }}
                         .styled-table td:nth-child(1), .styled-table th:nth-child(1) {{ text-align: right; width: 45%; white-space: nowrap; }}
                         .styled-table td:nth-child(2), .styled-table th:nth-child(2) {{ text-align: right; width: 55%; }}
-                        .styled-table tbody tr:nth-of-type(even) {{ background-color: rgba(250, 249, 246, 0.92); }}
-                        .designer-credit {{ text-align: center; font-size: 13px; font-weight: bold; color: #2e8b57; margin-top: 12px; position: relative; z-index: 2; }}
+                        .styled-table tbody tr:nth-of-type(even) {{ background-color: #faf9f6; }}
+                        .designer-credit {{ text-align: center; font-size: 13px; font-weight: bold; color: #2e8b57; margin-top: 12px; }}
                         
-                        /* العلامة المائية في المنتصف وأمام الخلفية ولكن شفافة وواضحة */
+                        /* اللوجو يظهر قدام الجدول تماماً وبشكل كبيـر وواضح */
                         .watermark-logo {{ 
                             position: absolute; 
-                            top: 55%; 
+                            top: 52%; 
                             left: 50%; 
                             transform: translate(-50%, -50%); 
-                            width: 340px; 
-                            opacity: 0.12; 
-                            z-index: 1; 
+                            width: 360px; 
+                            opacity: 0.18; 
+                            z-index: 999; 
                             pointer-events: none; 
                         }}
                         
@@ -143,15 +143,22 @@ if show_button:
                                 box-shadow: none !important;
                                 margin: 0 !important;
                             }}
-                            .watermark-logo {{ opacity: 0.12 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
+                            .watermark-logo {{ 
+                                opacity: 0.18 !important; 
+                                z-index: 999 !important;
+                                -webkit-print-color-adjust: exact; 
+                                print-color-adjust: exact; 
+                            }}
                             .styled-table th {{ background-color: #1b4d3e !important; color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
                         }}
                     </style>
                 </head>
                 <body>
                     <div class="print-page-wrapper">
+                        <!-- اللوجو بداخل الكرت ومرفوع للأمام زاد حجمه وبوضوح ممتاز -->
                         <img src="{LOGO_URL}" class="watermark-logo" alt="Watermark">
-                        <div style="margin-bottom: 5px; text-align: right; position: relative; z-index: 2;">{logo_img_tag}</div>
+                        
+                        <div style="margin-bottom: 5px; text-align: right;">{logo_img_tag}</div>
                         <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
                         <div class="print-header-subtitle">الترم الاول 2026</div>
                         <div class="print-ayah">قل لن يصيبنا إلا ما كتب الله لنا</div>
