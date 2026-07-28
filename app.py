@@ -106,13 +106,33 @@ if show_button:
                         .styled-table tbody tr:nth-of-type(even) {{ background-color: #faf9f6; }}
                         .designer-credit {{ text-align: center; font-size: 13px; font-weight: bold; color: #2e8b57; margin-top: 12px; }}
                         .watermark {{ position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 45px; color: rgba(27, 77, 62, 0.03); z-index: 9999; pointer-events: none; font-weight: bold; white-space: nowrap; }}
+                        
                         @media print {{
-                            body {{ background-color: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
-                            .print-page-wrapper {{ 
-                                border: 3px solid #1b4d3e !important; 
-                                margin: 0 0 0 auto !important; 
-                                width: 100% !important; 
-                                max-width: 100% !important; 
+                            @page {{
+                                size: A4 landscape;
+                                margin: 5mm;
+                            }}
+                            /* إخفاء أي عناصر خارجية في صفحة ستريمليت الرئيسية عند الطباعة */
+                            html, body {{
+                                background-color: #ffffff !important;
+                                height: 100% !important;
+                                overflow: hidden !important;
+                            }}
+                            body * {{
+                                visibility: hidden;
+                            }}
+                            .print-page-wrapper, .print-page-wrapper * {{
+                                visibility: visible;
+                            }}
+                            .print-page-wrapper {{
+                                position: absolute;
+                                left: 0;
+                                top: 0;
+                                width: 100% !important;
+                                max-width: 100% !important;
+                                border: 3px solid #1b4d3e !important;
+                                margin: 0 !important;
+                                box-shadow: none !important;
                             }}
                             .styled-table th {{ background-color: #1b4d3e !important; color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
                         }}
