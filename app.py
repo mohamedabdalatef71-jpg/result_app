@@ -91,7 +91,7 @@ if show_button:
                             background-color: #ffffff; 
                             position: relative; 
                             text-align: center; 
-                    box-sizing: border-box;
+                            box-sizing: border-box;
                             overflow: hidden;
                         }}
                         .print-header-title {{ font-family: 'Amiri', serif; text-align: center; color: #2e8b57; font-size: 26px; font-weight: bold; margin-bottom: 0px; position: relative; z-index: 2; }}
@@ -108,15 +108,15 @@ if show_button:
                         .styled-table tbody tr:nth-of-type(even) {{ background-color: rgba(250, 249, 246, 0.95); }}
                         .designer-credit {{ text-align: center; font-size: 13px; font-weight: bold; color: #2e8b57; margin-top: 12px; position: relative; z-index: 2; }}
                         
-                        /* العلامة المائية في منتصف الجدول وبدون خلفية بيضاء (إزالة المربع الأبيض بالكامل) */
+                        /* العلامة المائية أصبحت أمام الكلام وفوق الجدول وبشفافية خفيفة جداً وبدون خلفية بيضاء */
                         .watermark-logo {{ 
                             position: absolute; 
-                            top: 55%; 
+                            top: 50%; 
                             left: 50%; 
                             transform: translate(-50%, -50%); 
-                            width: 370px; 
-                            opacity: 0.14; 
-                            z-index: 1; 
+                            width: 390px; 
+                            opacity: 0.08; 
+                            z-index: 10; 
                             pointer-events: none; 
                             mix-blend-mode: multiply;
                             filter: contrast(140%) brightness(105%);
@@ -146,7 +146,8 @@ if show_button:
                                 margin: 0 !important;
                             }}
                             .watermark-logo {{ 
-                                opacity: 0.14 !important; 
+                                opacity: 0.08 !important; 
+                                z-index: 10 !important;
                                 mix-blend-mode: multiply !important;
                                 -webkit-print-color-adjust: exact; 
                                 print-color-adjust: exact; 
@@ -157,7 +158,7 @@ if show_button:
                 </head>
                 <body>
                     <div class="print-page-wrapper">
-                        <!-- العلامة المائية في المنتصف وبدون خلفية بيضاء -->
+                        <!-- العلامة المائية بقت قدام فوق كل العناصر وبشكل خفيف جداً -->
                         <img src="{LOGO_URL}" class="watermark-logo" alt="Watermark">
                         
                         <div style="margin-bottom: 5px; text-align: right; position: relative; z-index: 2;">{logo_img_tag}</div>
