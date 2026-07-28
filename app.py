@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import streamlit.components.v1 as components
+import base64
+import os
 
 @st.cache_data
 def load_data():
@@ -9,6 +11,17 @@ def load_data():
     return df
 
 df = load_data()
+
+# دالة لتحويل صورة اللوجو إلى Base64 عشان تتضمن جوه الـ HTML وتظهر في الطباعة بكل سهولة
+def get_image_base64(path):
+    if os.path.exists(path):
+        with open(path, "rb") as f:
+            data = f.read()
+        return base64.b64encode(data).decode()
+    return ""
+
+logo_base64 = get_image_base64("logo.png")
+logo_img_tag = f'<img src="data:image/png;base64,{logo_base64}" style="max-height: 80px; margin-bottom: 5px;" alt="شعار الكلية">' if logo_base64 else ""
 
 # تصميم الموقع العام
 st.markdown("""
@@ -70,7 +83,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# العناوين الرئيسية
+# العناوين الرئيسية في الموقع
 st.markdown("<h1 class='main-title'>نتيجة الفرقة الإعدادية</h1>", unsafe_allow_html=True)
 st.markdown("<h3 class='sub-title'>الترم الاول 2026</h3>", unsafe_allow_html=True)
 
@@ -147,7 +160,7 @@ if show_button:
                     if k:
                         rows_html += f"<tr><td><b>{k}</b></td><td>{v}</td></tr>"
 
-                # قالب HTML المتكامل مع الإطار والجدول والطباعة
+                # قالب HTML المتكامل مع اللوجو والإطار والجدول والطباعة
                 full_card_html = f"""
                 <!DOCTYPE html>
                 <html lang="ar" dir="rtl">
@@ -170,29 +183,33 @@ if show_button:
                             background-color: #ffffff;
                             box-shadow: 0 4px 15px rgba(27, 77, 62, 0.15);
                             position: relative;
+                            text-align: center;
+                        }}
+                        .logo-container {{
+                            margin-bottom: 5px;
                         }}
                         .print-header-title {{
                             font-family: 'Amiri', serif;
                             text-align: center;
                             color: #2e8b57;
-                            font-size: 28px;
+                            font-size: 26px;
                             font-weight: bold;
                             margin-bottom: 0px;
                         }}
                         .print-header-subtitle {{
                             text-align: center;
                             color: #d4af37;
-                            font-size: 18px;
+                            font-size: 17px;
                             font-weight: bold;
-                            margin-bottom: 8px;
+                            margin-bottom: 6px;
                         }}
                         .print-ayah {{
                             text-align: center;
                             color: #2e8b57;
                             font-family: 'Amiri', serif;
                             font-weight: bold;
-                            font-size: 16px;
-                            margin-bottom: 15px;
+                            font-size: 15px;
+                            margin-bottom: 12px;
                         }}
                         .table-container {{
                             width: 100%;
@@ -273,6 +290,9 @@ if show_button:
                 <body>
                     <div class="print-page-wrapper">
                         <div class="watermark">نتيجة الفرقة الإعدادية - الترم الاول 2026</div>
+                        <div class="logo-container">
+                            {logo_img_tag}
+                        </div>
                         <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
                         <div class="print-header-subtitle">الترم الاول 2026</div>
                         <div class="print-ayah">قل لن يصيبنا إلا ما كتب الله لنا</div>
@@ -296,10 +316,10 @@ if show_button:
                 </html>
                 """
                 
-                # عرض النتيجة والإطار بشكل احترافي مظبوط الارتفاع
-                components.html(full_card_html, height=550, scrolling=True)
+                # عرض البطاقة والنتيجة
+                components.html(full_card_html, height=600, scrolling=True)
                 
-                # زر الطباعة المنفصل
+                # زر الطباعة
                 print_button_code = """
                 <div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
                     <button onclick="parent.window.print();" style="background-color: #2e8b57; color: white; padding: 12px 35px; border: 2px solid #d4af37; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Cairo', sans-serif;">
