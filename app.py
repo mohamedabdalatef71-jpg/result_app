@@ -10,11 +10,10 @@ def load_data():
 
 df = load_data()
 
-# رابط الصورة المباشر من جيت هب
 LOGO_URL = "https://raw.githubusercontent.com/mohamedabdalatef71-jpg/result_app/ff737f289e52d0456b3202bf07a2d512ebb33d92/logo.jpg"
 
 if LOGO_URL:
-    logo_img_tag = f'<img src="{LOGO_URL}" style="max-height: 75px; margin-bottom: 5px; display: block; margin-left: auto; margin-right: auto;" alt="شعار الكلية">'
+    logo_img_tag = f'<img src="{LOGO_URL}" style="max-height: 75px; margin-bottom: 5px; display: block; margin-right: 0; margin-left: auto;" alt="شعار الكلية">'
 else:
     logo_img_tag = '<div style="font-size: 35px; color: #1b4d3e; margin-bottom: 5px;">🏛️</div>'
 
@@ -83,7 +82,16 @@ if show_button:
                     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
                     <style>
                         body {{ font-family: 'Cairo', sans-serif; background-color: transparent; margin: 0; padding: 10px; }}
-                        .print-page-wrapper {{ border: 3px solid #1b4d3e; border-radius: 15px; padding: 20px; margin: 0 auto; max-width: 600px; background-color: #ffffff; box-shadow: 0 4px 15px rgba(27, 77, 62, 0.15); position: relative; text-align: center; }}
+                        .print-page-wrapper {{ 
+                            border: 3px solid #1b4d3e; 
+                            border-radius: 15px;
+                            padding: 20px; 
+                            margin: 0 0 0 auto; 
+                            max-width: 600px; 
+                            background-color: #ffffff; 
+                            position: relative; 
+                            text-align: center; 
+                        }}
                         .print-header-title {{ font-family: 'Amiri', serif; text-align: center; color: #2e8b57; font-size: 26px; font-weight: bold; margin-bottom: 0px; }}
                         .print-header-subtitle {{ text-align: center; color: #d4af37; font-size: 17px; font-weight: bold; margin-bottom: 6px; }}
                         .print-ayah {{ text-align: center; color: #2e8b57; font-family: 'Amiri', serif; font-weight: bold; font-size: 15px; margin-bottom: 12px; }}
@@ -100,7 +108,12 @@ if show_button:
                         .watermark {{ position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 45px; color: rgba(27, 77, 62, 0.03); z-index: 9999; pointer-events: none; font-weight: bold; white-space: nowrap; }}
                         @media print {{
                             body {{ background-color: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
-                            .print-page-wrapper {{ border: 3px solid #1b4d3e !important; box-shadow: none !important; width: 100% !important; max-width: 100% !important; }}
+                            .print-page-wrapper {{ 
+                                border: 3px solid #1b4d3e !important; 
+                                margin: 0 0 0 auto !important; 
+                                width: 100% !important; 
+                                max-width: 100% !important; 
+                            }}
                             .styled-table th {{ background-color: #1b4d3e !important; color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
                         }}
                     </style>
@@ -108,7 +121,7 @@ if show_button:
                 <body>
                     <div class="print-page-wrapper">
                         <div class="watermark">نتيجة الفرقة الإعدادية - الترم الاول 2026</div>
-                        <div style="margin-bottom: 5px; text-align: center;">{logo_img_tag}</div>
+                        <div style="margin-bottom: 5px; text-align: right;">{logo_img_tag}</div>
                         <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
                         <div class="print-header-subtitle">الترم الاول 2026</div>
                         <div class="print-ayah">قل لن يصيبنا إلا ما كتب الله لنا</div>
@@ -140,3 +153,4 @@ if show_button:
             st.error("عفواً، عمود 'رقم الجلوس' غير متطابق في ملف الإكسيل.")
     else:
         st.warning("الرجاء إدخال رقم الجلوس أولاً.")
+-
