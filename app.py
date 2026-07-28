@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import streamlit.components.v1 as components
 
 @st.cache_data
 def load_data():
@@ -9,7 +10,7 @@ def load_data():
 
 df = load_data()
 
-# تصميم أكاديمي رسمي فخم مع زرار طباعة يعمل بكفاءة تامة
+# تصميم أكاديمي رسمي متجاوب
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap');
@@ -67,15 +68,16 @@ st.markdown("""
         color: #ffd700;
     }
     
-    /* تنسيق الجدول الرسمي الفخم */
-    .table-wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .table-container {
         width: 100%;
+        overflow-x: auto;
+        display: flex;
+        justify-content: center;
         margin-top: 15px;
         margin-bottom: 15px;
+        padding-bottom: 5px;
     }
+    
     .styled-table {
         direction: rtl;
         border-collapse: separate;
@@ -87,9 +89,9 @@ st.markdown("""
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 4px 15px rgba(27, 77, 62, 0.3);
-        width: auto;
-        min-width: 450px;
+        width: 100%;
         max-width: 600px;
+        min-width: 450px;
     }
     
     .styled-table th {
@@ -140,6 +142,7 @@ st.markdown("""
         color: #2e8b57;
         margin-top: 8px;
         margin-bottom: 15px;
+        width: 100%;
     }
 
     @media print {
@@ -172,7 +175,6 @@ with col2:
     seat_no = st.text_input("ادخل رقم الجلوس:")
     show_button = st.button("إظهار النتيجة", use_container_width=True)
     
-    # الآية الكريمة بلون واضح
     st.markdown("<p style='text-align: center; color: #2e8b57; font-family: Amiri, serif; font-weight: bold; font-size: 19px; margin-top: 15px;'>قل لن يصيبنا إلا ما كتب الله لنا</p>", unsafe_allow_html=True)
 
 if show_button:
@@ -226,7 +228,7 @@ if show_button:
                 
                 table_html = f"""
                 <div class="watermark">نتيجة الفرقة الإعدادية - الترم الاول 2026</div>
-                <div class="table-wrapper">
+                <div class="table-container">
                     <table class='styled-table'>
                         <thead>
                             <tr>
@@ -255,20 +257,22 @@ if show_button:
                 table_html += f"""
                         </tbody>
                     </table>
-                    <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
                 </div>
+                <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
                 """
                 
                 st.markdown(table_html, unsafe_allow_html=True)
                 
-                # زر طباعة محسن ومضمون يعمل بلغة الجافاسكريبت المباشرة
-                st.markdown("""
-                    <div style="text-align: center; margin-top: 15px;">
-                        <button onclick="window.print();" style="background-color: #2e8b57; color: white; padding: 12px 35px; border: 2px solid #d4af37; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                            🖨️ طباعة النتيجة
-                        </button>
-                    </div>
-                """, unsafe_allow_html=True)
+                # استخدام Streamlit Components لضمان تشغيل الجافاسكريبت الخاص بالطباعة داخل عنصر مستقل آمن
+                print_button_code = """
+                <div style="text-align: center; margin-top: 15px;">
+                    <button onclick="parent.window.print();" style="background-color: #2e8b57; color: white; padding: 12px 35px; border: 2px solid #d4af37; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Cairo', sans-serif;">
+                        🖨️ طباعة النتيجة
+                    </button>
+                </div>
+                """
+                components.html(print_button_code, height=70)
+                
             else:
                 st.error("رقم الجلوس غير موجود، تأكد من الرقم وادخله مرة أخرى.")
         else:
