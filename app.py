@@ -10,7 +10,7 @@ def load_data():
 
 df = load_data()
 
-# تصميم أكاديمي رسمي متجاوب
+# تصميم أكاديمي مع إضافة برواز فخم لصفحة الطباعة
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;700&display=swap');
@@ -145,18 +145,65 @@ st.markdown("""
         width: 100%;
     }
 
+    /* إعدادات الطباعة وإضافة الإطار المحيط بصفحة الطباعة بالكامل */
     @media print {
-        body { background: white !important; }
-        .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"] {
+        body { 
+            background: white !important; 
+            margin: 0 !important;
+            padding: 10px !important;
+        }
+        
+        /* إخفاء عناصر الموقع غير المرغوب فيها أثناء الطباعة */
+        .stButton, .stTextInput, h1, h3, hr, div[data-testid="stSidebar"], div[data-testid="stSuccess"] {
             display: none !important;
         }
+        
+        /* إضافة برواز خارجي يحيط بصفحة الطباعة بالكامل مع مسافة داخلية مريحة */
+        .print-page-wrapper {
+            border: 3px solid #1b4d3e !important;
+            border-radius: 15px !important;
+            padding: 25px !important;
+            margin: 10px auto !important;
+            max-width: 700px !important;
+            background-color: #ffffff !important;
+            position: relative;
+            box-shadow: none !important;
+        }
+        
+        /* تنسيق العناوين داخل ورقة الطباعة المؤطرة */
+        .print-header-title {
+            font-family: 'Amiri', serif !important;
+            text-align: center !important;
+            color: #2e8b57 !important;
+            font-size: 30px !important;
+            font-weight: bold !important;
+            margin-bottom: 0px !important;
+        }
+        
+        .print-header-subtitle {
+            text-align: center !important;
+            color: #d4af37 !important;
+            font-size: 18px !important;
+            font-weight: bold !important;
+            margin-bottom: 15px !important;
+        }
+
+        .print-ayah {
+            text-align: center !important;
+            color: #2e8b57 !important;
+            font-family: 'Amiri', serif !important;
+            font-weight: bold !important;
+            font-size: 16px !important;
+            margin-bottom: 15px !important;
+        }
+
         .watermark {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 70px;
-            color: rgba(27, 77, 62, 0.05);
+            font-size: 60px;
+            color: rgba(27, 77, 62, 0.04);
             z-index: 9999;
             pointer-events: none;
             font-weight: bold;
@@ -166,7 +213,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# العناوين
+# العناوين في الموقع العادي
 st.markdown("<h1 class='main-title'>نتيجة الفرقة الإعدادية</h1>", unsafe_allow_html=True)
 st.markdown("<h3 class='sub-title'>الترم الاول 2026</h3>", unsafe_allow_html=True)
 
@@ -226,17 +273,23 @@ if show_button:
                 personal_info = {k: student_data.get(k, "") for k in base_keys if k in student_data or k in df.columns}
                 subjects_info = {k: v for k, v in student_data.items() if k not in base_keys and k != seat_col}
                 
+                # بناء هيكل النتيجة بحيث يظهر داخل البرواز عند الطباعة
                 table_html = f"""
-                <div class="watermark">نتيجة الفرقة الإعدادية - الترم الاول 2026</div>
-                <div class="table-container">
-                    <table class='styled-table'>
-                        <thead>
-                            <tr>
-                                <th>بيانات الطالب</th>
-                                <th>النتيجة</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div class="print-page-wrapper">
+                    <div class="watermark">نتيجة الفرقة الإعدادية - الترم الاول 2026</div>
+                    <div class="print-header-title" style="display:none;">نتيجة الفرقة الإعدادية</div>
+                    <div class="print-header-subtitle" style="display:none;">الترم الاول 2026</div>
+                    <div class="print-ayah" style="display:none;">قل لن يصيبنا إلا ما كتب الله لنا</div>
+                    
+                    <div class="table-container">
+                        <table class='styled-table'>
+                            <thead>
+                                <tr>
+                                    <th>بيانات الطالب</th>
+                                    <th>النتيجة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                 """
                 
                 for k, v in personal_info.items():
@@ -255,15 +308,16 @@ if show_button:
                         table_html += f"<tr><td><b>{k}</b></td><td>{v}</td></tr>"
                 
                 table_html += f"""
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
                 </div>
-                <div class="designer-credit">Designed by Engineer Mohamed Abdelatif Elsayed</div>
                 """
                 
                 st.markdown(table_html, unsafe_allow_html=True)
                 
-                # استخدام Streamlit Components لضمان تشغيل الجافاسكريبت الخاص بالطباعة داخل عنصر مستقل آمن
+                # زر الطباعة
                 print_button_code = """
                 <div style="text-align: center; margin-top: 15px;">
                     <button onclick="parent.window.print();" style="background-color: #2e8b57; color: white; padding: 12px 35px; border: 2px solid #d4af37; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3); font-family: 'Cairo', sans-serif;">
