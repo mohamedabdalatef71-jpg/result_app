@@ -64,7 +64,7 @@ if show_button:
                         return ""
                     return val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
 
-                # البحث عن الأعمدة بدقة
+                # البحث عن الأعمدة بدقة تامة
                 seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
                 name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or str(c).strip() == 'الاسم'), None)
                 percent_key = next((c for c in df.columns if 'النسبة' in str(c)), None)
@@ -81,7 +81,7 @@ if show_button:
                 if not status_key:
                     status_key = next((c for c in df.columns if str(c).strip() == 'النتيجة'), None)
 
-                # بناء البيانات بالترتيب الجديد المطلوب تماماً
+                # بناء جدول بيانات الطالب بالترتيب السليم والمضمون
                 personal_info = {}
                 target_fields = [
                     (seat_key, "رقم الجلوس"),
@@ -97,10 +97,10 @@ if show_button:
                 for key_col, label_name in target_fields:
                     if key_col and key_col in df.columns:
                         val = get_val(key_col)
-                        personal_info[key_col] = val
+                        personal_info[label_name] = val
                         used_keys.add(key_col)
 
-                # باقي الأعمدة للمواد فقط
+                # باقي الأعمدة تُعتبر مواد دراسية وتوضع تحت وحدها
                 subjects_info = {}
                 for col in df.columns:
                     if col not in used_keys:
