@@ -65,30 +65,30 @@ if show_button:
                         val = val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
                     student_data[col] = val
                 
-                # البحث الشامل والذكي عن كل مفتاح
+                # البحث عن المفاتيح الأساسية بدقة
                 seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
-                # مطابقة واسعة جداً لاسم الطالب (تغطي إسم الطالب / اسم الطالب / الطالب / الاسم)
                 name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or 'طالب' in str(c)), None)
                 grade_key = next((c for c in df.columns if 'التقدير' in str(c)), None)
                 order_key = next((c for c in df.columns if 'الترتيب' in str(c)), None)
+                # دالة دقيقة لتمييز عمود النتيجة (ناجح/راسب) عن اسم الجدول
                 status_key = next((c for c in df.columns if str(c).strip() == 'النتيجة'), None)
-                total_key = next((c for c in df.columns if 'المجموع' in str(c)), None)
+                total_key = next((c for c in df.columns if 'المجموع' in str(c) or 'النسبة' in str(c)), None)
                 
-                # ترتيب القائمة الأساسية صراحة
                 ordered_personal_keys = []
                 for k in [seat_key, name_key, grade_key, order_key, status_key, total_key]:
                     if k and k in student_data and k not in ordered_personal_keys:
                         ordered_personal_keys.append(k)
                 
-                # استبعاد تام وشامل لجميع أعمدة البيانات الأساسية لضمان عدم ظهورها في المواد تحت
-                excluded_keys = set(ordered_personal_keys)
+                # التقاط أي أعمدة أساسية إضافية مفقودة
                 for k in df.columns:
-                    if any(x in str(k) for x in ['جلوس', 'اسم', 'إسم', 'طالب', 'التقدير', 'الترتيب', 'النتيجة', 'المجموع', 'النسبة']):
-                        excluded_keys.add(k)
+                    if any(x in str(k) for x in ['جلوس', 'اسم', 'إسم', 'طالب', 'كود', 'التقدير', 'الترتيب', 'المجموع', 'النسبة']) or str(k).strip() == 'النتيجة':
+                        if k not in ordered_personal_keys:
+                            ordered_personal_keys.append(k)
 
                 personal_info = {k: student_data[k] for k in ordered_personal_keys if k in student_data and student_data[k] != ""}
                 
-                # المواد فقط (منع ظهور أي بيانات شخصية تماماً هنا)
+                # المواد فقط (استبعاد الأعمدة الأساسية المحددة فقط لعدم تكرارها)
+                excluded_keys = set(ordered_personal_keys)
                 subjects_info = {k: v for k, v in student_data.items() if k not in excluded_keys and v != ""}
                 
                 rows_html = "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in personal_info.items()])
