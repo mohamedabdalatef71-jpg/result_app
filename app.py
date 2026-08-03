@@ -54,8 +54,6 @@ if show_button:
             if match_indices:
                 st.success("تم العثور على النتيجة بنجاح!")
                 idx = match_indices[0]
-                
-                # أخذ الصف الوحيد للطالب بدون أي تداخل أو دمج لصفوف أخرى
                 row = df.iloc[idx]
                 
                 student_data = {}
@@ -67,13 +65,33 @@ if show_button:
                         val = val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
                     student_data[col] = val
                 
-                base_keys = [c for c in df.columns if 'جلوس' in str(c) or 'اسم' in str(c) or 'كود' in str(c)]
-                personal_info = {k: student_data.get(k, "") for k in base_keys if k in student_data}
-                subjects_info = {k: v for k, v in student_data.items() if k not in base_keys and v != ""}
+                # تحديد الأعمدة وترتيبها حسب طلبك
+                seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
+                name_key = next((c for c in df.columns if 'اسم' in str(c)), None)
+                grade_key = next((c for c in df.columns if 'التقدير العام' in str(c) or c == 'التقدير'), None)
+                order_key = next((c for c in df.columns if 'الترتيب' in str(c)), None)
+                status_key = next((c for c in df.columns if str(c).strip() == 'النتيجة'), None)
+                total_key = next((c for c in df.columns if 'المجموع' in str(c)), None)
                 
-                rows_html = "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in personal_info.items() if k and v])
+                ordered_personal_keys = []
+                for k in [seat_key, name_key, grade_key, order_key, status_key, total_key]:
+                    if k and k in student_data and k not in ordered_personal_keys:
+                        ordered_personal_keys.append(k)
+                
+                # إضافة أي بيانات أساسية أخرى إن وجدت
+                for k in df.columns:
+                    if any(x in str(k) for x in ['جلوس', 'اسم', 'كود', 'التقدير', 'الترتيب', 'النتيجة', 'المجموع', 'النسبة']):
+                        if k not in ordered_personal_keys:
+                            ordered_personal_keys.append(k)
+
+                personal_info = {k: student_data[k] for k in ordered_personal_keys if k in student_data and student_data[k] != ""}
+                
+                # المواد وباقي الأعمدة
+                subjects_info = {k: v for k, v in student_data.items() if k not in ordered_personal_keys and v != ""}
+                
+                rows_html = "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in personal_info.items()])
                 rows_html += '<tr><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 10px 12px; white-space: nowrap;">المواد</th><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 10px 12px; border-right: 2px solid #b8860b;">التقديرات / الدرجات</th></tr>'
-                rows_html += "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in subjects_info.items() if k])
+                rows_html += "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in subjects_info.items()])
 
                 full_card_html = f"""
                 <!DOCTYPE html>
