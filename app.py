@@ -64,46 +64,48 @@ if show_button:
                         return ""
                     return val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
 
-                # التقاط أعمدة البيانات الأساسية بدقة تامة طبقاً لترتيب رسمتك
+                # البحث الدقيق والصريح عن الأعمدة المطلوبة بالاسم حرفياً
                 seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
-                name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or 'طالب' in str(c)), None)
+                name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or str(c).strip() == 'الاسم'), None)
                 grade_key = next((c for c in df.columns if str(c).strip() == 'التقدير العام'), None)
                 total_key = next((c for c in df.columns if str(c).strip() == 'المجموع الكلي'), None)
                 percent_key = next((c for c in df.columns if 'النسبة' in str(c)), None)
-                order_key = next((c for c in df.columns if 'الترتيب' in str(c)), None)
+                order_key = next((c for c in df.columns if str(c).strip() == 'الترتيب'), None)
                 
-                # البحث عن عمود النتيجة الفعلي (الذي يحتوي على ناجح/راسب) وتجنب اسم رأس الجدول القديم
+                # البحث عن عمود النتيجة الفعلي الذي يحتوي على (ناجح / راسب)
                 status_key = None
                 for c in df.columns:
-                    if str(c).strip() == 'النتيجة':
-                        val_check = get_val(c)
-                        if val_check in ['ناجح', 'راسب', 'دور ثاني'] or (val_check != "" and val_check != "النتيجة"):
-                            status_key = c
-                            break
+                    val_check = get_val(c)
+                    if val_check in ['ناجح', 'راسب', 'دور ثاني']:
+                        status_key = c
+                        break
                 if not status_key:
-                    # اختيار أول عمود يحتوي على قيمة ناجح/راسب أو مطابق
-                    for c in df.columns:
-                        if 'نتيجة' in str(c).lower() and get_val(c) in ['ناجح', 'راسب']:
-                            status_key = c
-                            break
+                    status_key = next((c for c in df.columns if str(c).strip() == 'النتيجة'), None)
 
-                # ترتيب بيانات الطالب تماماً زي الرسمة: رقم الجلوس، الاسم، التقدير العام، المجموع، النسبة، الترتيب، النتيجة
+                # بناء جدول بيانات الطالب بالترتيب اليدوي الصارم تماماً زي الرسمة
                 personal_info = {}
-                if seat_key: personal_info[seat_key] = get_val(seat_key)
-                if name_key: personal_info[name_key] = get_val(name_key)
-                if grade_key: personal_info[grade_key] = get_val(grade_key)
-                if total_key: personal_info[total_key] = get_val(total_key)
-                if percent_key: personal_info[percent_key] = get_val(percent_key)
-                if order_key: personal_info[order_key] = get_val(order_key)
-                if status_key: personal_info[status_key] = get_val(status_key)
+                target_fields = [
+                    (seat_key, "رقم الجلوس"),
+                    (name_key, "اسم الطالب"),
+                    (grade_key, "التقدير العام"),
+                    (total_key, "المجموع الكلي"),
+                    (percent_key, "النسبة المئوية"),
+                    (order_key, "الترتيب"),
+                    (status_key, "النتيجة")
+                ]
                 
-                # باقي الأعمدة هي المواد الدراسية فقط
-                excluded_keys = {seat_key, name_key, grade_key, total_key, percent_key, order_key, status_key}
-                excluded_keys = {k for k in excluded_keys if k is not None}
-                
+                used_keys = set()
+                for key_col, label_name in target_fields:
+                    if key_col and key_col in df.columns:
+                        val = get_val(key_col)
+                        # لو الاسم فاضي أو العمود تشابه، نتخطاه أو نضعه بقيمته
+                        personal_info[key_col] = val
+                        used_keys.add(key_col)
+
+                # باقي الأعمدة تُعتبر مواد دراسية وتوضع تحت وحدها
                 subjects_info = {}
                 for col in df.columns:
-                    if col not in excluded_keys:
+                    if col not in used_keys:
                         v = get_val(col)
                         if v != "":
                             subjects_info[col] = v
