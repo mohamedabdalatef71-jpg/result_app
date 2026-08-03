@@ -43,7 +43,7 @@ with col2:
 
 if show_button:
     if seat_no:
-        possible_cols = [c for c in df.columns if 'جلوس' in str(c) or str(c).strip() in ['الجلوس', 'رقم الجلوس', 'رقم_الجلوس']]
+        possible_cols = [c for c in df.columns if 'جلوس' in str(c)]
         seat_col = possible_cols[0] if possible_cols else None
         
         if seat_col:
@@ -65,29 +65,25 @@ if show_button:
                         val = val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
                     student_data[col] = val
                 
-                # البحث عن المفاتيح الأساسية بدقة
+                # البحث الدقيق عن الأعمدة المطلوبة حسب الترتيب المحدّد تماماً
                 seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
                 name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or 'طالب' in str(c)), None)
                 grade_key = next((c for c in df.columns if 'التقدير' in str(c)), None)
+                total_key = next((c for c in df.columns if 'المجموع' in str(c) and 'النسبة' not in str(c)), None)
+                percent_key = next((c for c in df.columns if 'النسبة' in str(c)), None)
                 order_key = next((c for c in df.columns if 'الترتيب' in str(c)), None)
-                # دالة دقيقة لتمييز عمود النتيجة (ناجح/راسب) عن اسم الجدول
                 status_key = next((c for c in df.columns if str(c).strip() == 'النتيجة'), None)
-                total_key = next((c for c in df.columns if 'المجموع' in str(c) or 'النسبة' in str(c)), None)
                 
+                # ترتيب البيانات الأساسية صراحة بالترتيب المطلوب تماماً
+                target_order = [seat_key, name_key, grade_key, total_key, percent_key, order_key, status_key]
                 ordered_personal_keys = []
-                for k in [seat_key, name_key, grade_key, order_key, status_key, total_key]:
+                for k in target_order:
                     if k and k in student_data and k not in ordered_personal_keys:
                         ordered_personal_keys.append(k)
                 
-                # التقاط أي أعمدة أساسية إضافية مفقودة
-                for k in df.columns:
-                    if any(x in str(k) for x in ['جلوس', 'اسم', 'إسم', 'طالب', 'كود', 'التقدير', 'الترتيب', 'المجموع', 'النسبة']) or str(k).strip() == 'النتيجة':
-                        if k not in ordered_personal_keys:
-                            ordered_personal_keys.append(k)
-
                 personal_info = {k: student_data[k] for k in ordered_personal_keys if k in student_data and student_data[k] != ""}
                 
-                # المواد فقط (استبعاد الأعمدة الأساسية المحددة فقط لعدم تكرارها)
+                # المواد وباقي الأعمدة (استبعاد البيانات الشخصية التي ظهرت في الأعلى)
                 excluded_keys = set(ordered_personal_keys)
                 subjects_info = {k: v for k, v in student_data.items() if k not in excluded_keys and v != ""}
                 
