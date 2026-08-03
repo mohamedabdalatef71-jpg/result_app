@@ -64,13 +64,13 @@ if show_button:
                         return ""
                     return val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
 
-                # البحث عن الأعمدة الأساسية بدقة
+                # البحث عن الأعمدة بدقة
                 seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
                 name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or str(c).strip() == 'الاسم'), None)
-                grade_key = next((c for c in df.columns if str(c).strip() == 'التقدير العام'), None)
-                total_key = next((c for c in df.columns if str(c).strip() == 'المجموع الكلي'), None)
                 percent_key = next((c for c in df.columns if 'النسبة' in str(c)), None)
                 order_key = next((c for c in df.columns if str(c).strip() == 'الترتيب'), None)
+                grade_key = next((c for c in df.columns if str(c).strip() == 'التقدير العام'), None)
+                total_key = next((c for c in df.columns if str(c).strip() == 'المجموع الكلي'), None)
                 
                 status_key = None
                 for c in df.columns:
@@ -81,15 +81,15 @@ if show_button:
                 if not status_key:
                     status_key = next((c for c in df.columns if str(c).strip() == 'النتيجة'), None)
 
-                # بناء البيانات الأساسية بالترتيب الصحيح تماماً
+                # بناء البيانات بالترتيب الجديد المطلوب تماماً
                 personal_info = {}
                 target_fields = [
                     (seat_key, "رقم الجلوس"),
                     (name_key, "اسم الطالب"),
-                    (grade_key, "التقدير العام"),
-                    (total_key, "المجموع الكلي"),
                     (percent_key, "النسبة المئوية"),
                     (order_key, "الترتيب"),
+                    (grade_key, "التقدير العام"),
+                    (total_key, "المجموع الكلي"),
                     (status_key, "النتيجة")
                 ]
                 
