@@ -4,7 +4,10 @@ import streamlit.components.v1 as components
 
 @st.cache_data
 def load_data():
-    df = pd.read_excel('result.xlsx')
+    # قراءة ملف الإكسيل من الورقة الأولى Append1 أو حسب الموجود
+    xls = pd.ExcelFile('result.xlsx')
+    sheet_name = xls.sheet_names[0]
+    df = pd.read_excel(xls, sheet_name=sheet_name)
     df.columns = [str(col).strip() for col in df.columns]
     return df
 
@@ -41,7 +44,8 @@ with col2:
 
 if show_button:
     if seat_no:
-        seat_col = "رقم الجلوس"
+        # العمود في الإكسيل اسمه "الجلوس" بناءً على الصورة
+        seat_col = "الجلوس"
         if seat_col in df.columns:
             clean_input = str(seat_no).strip()
             df[seat_col] = df[seat_col].astype(str).str.strip().str.replace('.0', '', regex=False)
@@ -60,17 +64,17 @@ if show_button:
                     v2 = str(row2[col]).strip() if row2 is not None and pd.notna(row2[col]) else ""
                     if v2.lower() == 'nan': v2 = ""
                     
-                    if col in ["كود الطالب", "رقم الجلوس"]:
+                    if col in ["كود الطالب", "الجلوس", "رقم الجلوس"]:
                         combined = f"{v1}{v2}".strip()
                     else:
                         combined = f"{v1} {v2}".strip() if v1 and v2 and v1 != v2 else (v1 or v2)
                     student_data[col] = combined
                 
-                base_keys = ["رقم الجلوس", "اسم الطالب", "كود الطالب"]
+                base_keys = ["الجلوس", "رقم الجلوس", "اسم الطالب", "كود الطالب"]
                 personal_info = {k: student_data.get(k, "") for k in base_keys if k in student_data or k in df.columns}
                 subjects_info = {k: v for k, v in student_data.items() if k not in base_keys and k != seat_col}
                 
-                rows_html = "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in personal_info.items() if k])
+                rows_html = "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in personal_info.items() if k and v])
                 rows_html += '<tr><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 10px 12px; white-space: nowrap;">المواد</th><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 10px 12px; border-right: 2px solid #b8860b;">التقديرات / الدرجات</th></tr>'
                 rows_html += "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in subjects_info.items() if k])
 
@@ -107,8 +111,7 @@ if show_button:
                         .styled-table td:nth-child(2), .styled-table th:nth-child(2) {{ text-align: right; width: 55%; }}
                         .styled-table tbody tr:nth-of-type(even) {{ background-color: rgba(250, 249, 246, 0.95); }}
                         
-                        /* منطقة آية الكرسي في الفراغ تحت الجدول */
-                        . kursi-text {{
+                        .kursi-text {{
                             font-family: 'Amiri', serif;
                             font-size: 11.5px;
                             color: #1b4d3e;
@@ -121,8 +124,6 @@ if show_button:
                             z-index: 2;
                             opacity: 0.85;
                         }}
-
-                        /* اسم الكلية وحقوق التصميم في الحافة تحت */
                         .footer-container {{
                             display: flex;
                             justify-content: space-between;
@@ -135,8 +136,6 @@ if show_button:
                         }}
                         .college-name {{ font-family: 'Amiri', serif; font-size: 13px; font-weight: bold; color: #d4af37; }}
                         .designer-credit {{ font-size: 11px; font-weight: bold; color: #2e8b57; }}
-                        
-                        /* العلامة المائية في منتصف الجدول وبشفافية هادئة وأمام العناصر */
                         .watermark-logo {{ 
                             position: absolute; 
                             top: 52%; 
@@ -149,7 +148,6 @@ if show_button:
                             mix-blend-mode: multiply;
                             filter: contrast(140%) brightness(105%);
                         }}
-                        
                         .print-btn-container {{ margin-top: 20px; text-align: center; width: 100%; }}
                         .print-btn {{
                             background-color: #2e8b57; color: white; padding: 12px 40px; 
@@ -158,37 +156,11 @@ if show_button:
                             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
                         }}
                         .print-btn:hover {{ background-color: #246d43; }}
-
-                        @media print {{
-                            @page {{
-                                size: A4 portrait;
-                                margin: 8mm;
-                            }}
-                            body {{ background-color: #ffffff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
-                            .print-btn-container {{ display: none !important; }}
-                            .print-page-wrapper {{ 
-                                border: 3px solid #1b4d3e !important; 
-                                width: 100% !important; 
-                                max-width: 100% !important; 
-                                box-shadow: none !important;
-                                margin: 0 !important;
-                            }}
-                            .watermark-logo {{ 
-                                opacity: 0.07 !important; 
-                                z-index: 10 !important;
-                                mix-blend-mode: multiply !important;
-                                -webkit-print-color-adjust: exact; 
-                                print-color-adjust: exact; 
-                            }}
-                            .styled-table th {{ background-color: #1b4d3e !important; color: #ffffff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
-                        }}
                     </style>
                 </head>
                 <body>
                     <div class="print-page-wrapper">
-                        <!-- العلامة المائية في منتصف الجدول تماماً -->
                         <img src="{LOGO_URL}" class="watermark-logo" alt="Watermark">
-                        
                         <div style="margin-bottom: 2px; text-align: right; position: relative; z-index: 2;">{logo_img_tag}</div>
                         <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
                         <div class="print-header-subtitle">الترم الاول 2026</div>
@@ -201,12 +173,10 @@ if show_button:
                             </table>
                         </div>
 
-                        <!-- آية الكرسي كاملة في المنطقة الخالية تحت الجدول -->
                         <div class="kursi-text">
-                            اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ ما فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ
+                            اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ ما فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ
                         </div>
 
-                        <!-- حافة الصفحة من تحت: اسم الكلية واسمك بخط مزخرف متناسق -->
                         <div class="footer-container">
                             <div class="college-name">كلية الهندسة - جامعة الأزهر</div>
                             <div class="designer-credit">Designed by Eng. Mohamed Abdelatif</div>
@@ -223,6 +193,6 @@ if show_button:
             else:
                 st.error("رقم الجلوس غير موجود، تأكد من الرقم وادخله مرة أخرى.")
         else:
-            st.error("عفواً، عمود 'رقم الجلوس' غير متطابق في ملف الإكسيل.")
+            st.error("عفواً، عمود 'الجلوس' غير متطابق في ملف الإكسيل.")
     else:
         st.warning("الرجاء إدخال رقم الجلوس أولاً.")
