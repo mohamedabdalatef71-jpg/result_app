@@ -33,7 +33,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown("<h1 class='main-title'>نتيجة الفرقة الإعدادية</h1>", unsafe_allow_html=True)
-st.markdown("<h3 class='sub-title'>الترم الاول 2026</h3>", unsafe_allow_html=True)
+st.markdown("<h3 class='sub-title'>الترم الثاني 2026</h3>", unsafe_allow_html=True)
 
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
@@ -184,7 +184,7 @@ if show_button:
                         <img src="{LOGO_URL}" class="watermark-logo" alt="Watermark">
                         <div style="margin-bottom: 2px; text-align: right; position: relative; z-index: 2;">{logo_img_tag}</div>
                         <div class="print-header-title">نتيجة الفرقة الإعدادية</div>
-                        <div class="print-header-subtitle">الترم الاول 2026</div>
+                        <div class="print-header-subtitle">الترم الثاني 2026</div>
                         <div class="print-ayah">قل لن يصيبنا إلا ما كتب الله لنا</div>
                         
                         <div class="table-container">
