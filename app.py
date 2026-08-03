@@ -64,7 +64,7 @@ if show_button:
                         return ""
                     return val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
 
-                # البحث الدقيق والصريح عن الأعمدة المطلوبة بالاسم حرفياً
+                # البحث عن الأعمدة الأساسية بدقة
                 seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
                 name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or str(c).strip() == 'الاسم'), None)
                 grade_key = next((c for c in df.columns if str(c).strip() == 'التقدير العام'), None)
@@ -72,7 +72,6 @@ if show_button:
                 percent_key = next((c for c in df.columns if 'النسبة' in str(c)), None)
                 order_key = next((c for c in df.columns if str(c).strip() == 'الترتيب'), None)
                 
-                # البحث عن عمود النتيجة الفعلي الذي يحتوي على (ناجح / راسب)
                 status_key = None
                 for c in df.columns:
                     val_check = get_val(c)
@@ -82,7 +81,7 @@ if show_button:
                 if not status_key:
                     status_key = next((c for c in df.columns if str(c).strip() == 'النتيجة'), None)
 
-                # بناء جدول بيانات الطالب بالترتيب اليدوي الصارم تماماً زي الرسمة
+                # بناء البيانات الأساسية بالترتيب الصحيح تماماً
                 personal_info = {}
                 target_fields = [
                     (seat_key, "رقم الجلوس"),
@@ -98,11 +97,10 @@ if show_button:
                 for key_col, label_name in target_fields:
                     if key_col and key_col in df.columns:
                         val = get_val(key_col)
-                        # لو الاسم فاضي أو العمود تشابه، نتخطاه أو نضعه بقيمته
                         personal_info[key_col] = val
                         used_keys.add(key_col)
 
-                # باقي الأعمدة تُعتبر مواد دراسية وتوضع تحت وحدها
+                # باقي الأعمدة للمواد فقط
                 subjects_info = {}
                 for col in df.columns:
                     if col not in used_keys:
@@ -147,26 +145,13 @@ if show_button:
                         .styled-table td:nth-child(2), .styled-table th:nth-child(2) {{ text-align: right; width: 55%; }}
                         .styled-table tbody tr:nth-of-type(even) {{ background-color: rgba(250, 249, 246, 0.95); }}
                         
-                        .kursi-text {{
-                            font-family: 'Amiri', serif;
-                            font-size: 11.5px;
-                            color: #1b4d3e;
-                            text-align: justify;
-                            text-align-last: center;
-                            line-height: 1.5;
-                            margin: 8px 5px;
-                            font-weight: bold;
-                            position: relative;
-                            z-index: 2;
-                            opacity: 0.85;
-                        }}
                         .footer-container {{
                             display: flex;
                             justify-content: space-between;
                             align-items: center;
-                            margin-top: 8px;
+                            margin-top: 12px;
                             border-top: 1px dashed #d4af37;
-                            padding-top: 6px;
+                            padding-top: 8px;
                             position: relative;
                             z-index: 2;
                         }}
@@ -209,10 +194,6 @@ if show_button:
                             </table>
                         </div>
 
-                        <div class="kursi-text">
-                            اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ ما فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ
-                        </div>
-
                         <div class="footer-container">
                             <div class="college-name">كلية الهندسة - جامعة الأزهر</div>
                             <div class="designer-credit">Designed by Eng. Mohamed Abdelatif</div>
@@ -225,7 +206,7 @@ if show_button:
                 </body>
                 </html>
                 """
-                components.html(full_card_html, height=750, scrolling=True)
+                components.html(full_card_html, height=680, scrolling=True)
             else:
                 st.error("رقم الجلوس غير موجود، تأكد من الرقم وادخله مرة أخرى.")
         else:
