@@ -56,35 +56,46 @@ if show_button:
                 idx = match_indices[0]
                 row = df.iloc[idx]
                 
-                student_data = {}
-                for col in df.columns:
-                    val = str(row[col]).strip() if pd.notna(row[col]) else ""
-                    if val.lower() == 'nan': 
-                        val = ""
-                    else:
-                        val = val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
-                    student_data[col] = val
-                
-                # البحث عن المفاتيح بدقة تامة
+                # دالة تنظيف القيم النصية
+                def get_val(col_name):
+                    if not col_name or col_name not in df.columns:
+                        return ""
+                    val = str(row[col_name]).strip() if pd.notna(row[col_name]) else ""
+                    if val.lower() == 'nan':
+                        return ""
+                    return val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
+
+                # التقاط الأعمدة بدقة شديدة بالبحث عن الكلمات المفتاحية
                 seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
                 name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or 'طالب' in str(c)), None)
-                grade_key = next((c for c in df.columns if str(c).strip() == 'التقدير العام'), None)
-                total_key = next((c for c in df.columns if str(c).strip() == 'المجموع الكلي'), None)
+                grade_key = next((c for c in df.columns if 'التقدير العام' in str(c) or str(c).strip() == 'التقدير العام'), None)
+                total_key = next((c for c in df.columns if 'المجموع' in str(c) and 'النسبة' not in str(c)), None)
                 percent_key = next((c for c in df.columns if 'النسبة' in str(c)), None)
                 order_key = next((c for c in df.columns if 'الترتيب' in str(c)), None)
                 status_key = next((c for c in df.columns if str(c).strip() == 'النتيجة'), None)
                 
-                # فرض الترتيب المطلوب حصرياً للأعلى
-                target_keys = [seat_key, name_key, grade_key, total_key, percent_key, order_key, status_key]
-                ordered_personal_keys = [k for k in target_keys if k and k in student_data]
+                # بناء بيانات الطالب الأساسية حصرياً بالترتيب المطلوب
+                personal_info = {}
+                if seat_key: personal_info[seat_key] = get_val(seat_key)
+                if name_key: personal_info[name_key] = get_val(name_key)
+                if grade_key: personal_info[grade_key] = get_val(grade_key)
+                if total_key: personal_info[total_key] = get_val(total_key)
+                if percent_key: personal_info[percent_key] = get_val(percent_key)
+                if order_key: personal_info[order_key] = get_val(order_key)
+                if status_key: personal_info[status_key] = get_val(status_key)
                 
-                personal_info = {k: student_data[k] for k in ordered_personal_keys if student_data[k] != ""}
+                # استبعاد الأعمدة الأساسية لتبقى المواد فقط في الجدول الثاني
+                excluded_keys = {seat_key, name_key, grade_key, total_key, percent_key, order_key, status_key}
+                excluded_keys = {k for k in excluded_keys if k is not None}
                 
-                # المواد فقط (أي عمود غير الأعمدة السابقة يعتبر مادة)
-                excluded_keys = set(ordered_personal_keys)
-                subjects_info = {k: v for k, v in student_data.items() if k not in excluded_keys and v != ""}
+                subjects_info = {}
+                for col in df.columns:
+                    if col not in excluded_keys:
+                        v = get_val(col)
+                        if v != "":
+                            subjects_info[col] = v
                 
-                rows_html = "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in personal_info.items()])
+                rows_html = "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in personal_info.items() if v != ""])
                 rows_html += '<tr><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 10px 12px; white-space: nowrap;">المواد</th><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 10px 12px; border-right: 2px solid #b8860b;">التقديرات / الدرجات</th></tr>'
                 rows_html += "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in subjects_info.items()])
 
