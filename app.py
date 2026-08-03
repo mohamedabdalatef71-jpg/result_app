@@ -45,25 +45,23 @@ if show_button:
     if search_query:
         clean_input = str(search_query).strip()
         
-        # البحث عن الأعمدة المطلوبة
+        # البحث الذكي عن الأعمدة بغض النظر عن الهمزات
         seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
-        name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or str(c).strip() == 'الاسم'), None)
+        name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or 'الاسم' in str(c)), None)
         
         match_indices = []
         
-        # 1. لو الإدخال رقم (بحث برقم الجلوس)
-        if seat_key:
+        # 1. لو مدخل رقم، ندور في عمود رقم الجلوس أولاً
+        if seat_key and clean_input.isdigit():
             df_temp_seat = df[seat_key].astype(str).str.strip().str.replace('.0', '', regex=False)
             match_indices = df.index[df_temp_seat == clean_input].tolist()
         
-        # 2. لو ملقاش برقم الجلوس وكان الاسم متاح، ندور بالاسم أو جزء منه
+        # 2. لو ملقاش برقم الجلوس أو كان المدخل نص (اسم)، ندور في عمود اسم الطالب
         if not match_indices and name_key:
             df_temp_name = df[name_key].astype(str).str.strip()
-            # البحث الجزئي (يعني لو كتب جزء من الاسم بيلاقيه)
             match_indices = df.index[df_temp_name.str.contains(clean_input, na=False, case=False)].tolist()
             
         if match_indices:
-            # لو طلع أكتر من طالب بنفس الاسم الجزئي، هناخد أول نتيجة أو نعرضهم
             idx = match_indices[0]
             row = df.iloc[idx]
             
