@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import streamlit.components.v1 as components
+import difflib
 
 @st.cache_data
 def load_data():
@@ -45,21 +46,42 @@ if show_button:
     if search_query:
         clean_input = str(search_query).strip()
         
-        # البحث الذكي عن الأعمدة بغض النظر عن الهمزات
         seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
         name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or 'الاسم' in str(c)), None)
         
         match_indices = []
         
-        # 1. لو مدخل رقم، ندور في عمود رقم الجلوس أولاً
+        def normalize_arabic(text):
+            if not isinstance(text, str):
+                return ""
+            text = text.replace('أ', 'ا').replace('إ', 'ا').replace('آ', 'ا')
+            text = text.replace('ة', 'ه').replace('ى', 'ي')
+            return " ".join(text.split())
+
+        normalized_input = normalize_arabic(clean_input)
+
+        # 1. البحث برقم الجلوس
         if seat_key and clean_input.isdigit():
             df_temp_seat = df[seat_key].astype(str).str.strip().str.replace('.0', '', regex=False)
             match_indices = df.index[df_temp_seat == clean_input].tolist()
         
-        # 2. لو ملقاش برقم الجلوس أو كان المدخل نص (اسم)، ندور في عمود اسم الطالب
+        # 2. البحث بالاسم (مع دعم البحث الجزئي والتصحيح التلقائي للأخطاء الإملائية)
         if not match_indices and name_key:
-            df_temp_name = df[name_key].astype(str).str.strip()
-            match_indices = df.index[df_temp_name.str.contains(clean_input, na=False, case=False)].tolist()
+            names_list = df[name_key].astype(str).tolist()
+            normalized_names = [normalize_arabic(n) for n in names_list]
+            
+            # محاولة البحث الجزئي المباشر الأول
+            for idx, n in enumerate(normalized_names):
+                if normalized_input in n:
+                    match_indices.append(idx)
+            
+            # لو ملقاش بحث جزئي، نستخدم دقة التقارب لتصحيح الأخطاء الحرفية
+            if not match_indices:
+                # بيجيب أقرب الأسماء شبه بالمدخل حتى لو فيه حروف غلط
+                close_matches = difflib.get_close_matches(normalized_input, normalized_names, n=3, cutoff=0.5)
+                if close_matches:
+                    for cm in close_matches:
+                        match_indices.extend(df.index[df[name_key].astype(str).apply(normalize_arabic) == cm].tolist())
             
         if match_indices:
             idx = match_indices[0]
