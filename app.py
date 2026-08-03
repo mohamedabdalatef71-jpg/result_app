@@ -56,7 +56,7 @@ if show_button:
                 idx = match_indices[0]
                 row = df.iloc[idx]
                 
-                # دالة تنظيف القيم النصية
+                # دالة تنظيف القيم
                 def get_val(col_name):
                     if not col_name or col_name not in df.columns:
                         return ""
@@ -65,16 +65,26 @@ if show_button:
                         return ""
                     return val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
 
-                # التقاط الأعمدة بدقة شديدة بالبحث عن الكلمات المفتاحية
+                # البحث المباشر والدقيق عن أسماء الأعمدة في الإكسيل
                 seat_key = next((c for c in df.columns if 'جلوس' in str(c)), None)
                 name_key = next((c for c in df.columns if 'اسم' in str(c) or 'إسم' in str(c) or 'طالب' in str(c)), None)
-                grade_key = next((c for c in df.columns if 'التقدير العام' in str(c) or str(c).strip() == 'التقدير العام'), None)
-                total_key = next((c for c in df.columns if 'المجموع' in str(c) and 'النسبة' not in str(c)), None)
+                grade_key = next((c for c in df.columns if str(c).strip() == 'التقدير العام'), None)
+                total_key = next((c for c in df.columns if str(c).strip() == 'المجموع الكلي'), None)
                 percent_key = next((c for c in df.columns if 'النسبة' in str(c)), None)
                 order_key = next((c for c in df.columns if 'الترتيب' in str(c)), None)
-                status_key = next((c for c in df.columns if str(c).strip() == 'النتيجة'), None)
                 
-                # بناء بيانات الطالب الأساسية حصرياً بالترتيب المطلوب
+                # البحث عن عمود النتيجة حصرياً (متضمنة كلمة ناجح أو راسب أو العمود الذي اسمه النتيجة متجاوزاً رأس الجدول)
+                status_key = None
+                for c in df.columns:
+                    if str(c).strip() == 'النتيجة':
+                        val_check = get_val(c)
+                        if val_check in ['ناجح', 'راسب', 'دور ثاني'] or len(val_check) > 0:
+                            status_key = c
+                            break
+                if not status_key:
+                    status_key = next((c for c in df.columns if str(c).strip() == 'النتيجة'), None)
+
+                # بناء البيانات الأساسية للطالب بالترتيب المطلوب تماماً
                 personal_info = {}
                 if seat_key: personal_info[seat_key] = get_val(seat_key)
                 if name_key: personal_info[name_key] = get_val(name_key)
@@ -84,7 +94,7 @@ if show_button:
                 if order_key: personal_info[order_key] = get_val(order_key)
                 if status_key: personal_info[status_key] = get_val(status_key)
                 
-                # استبعاد الأعمدة الأساسية لتبقى المواد فقط في الجدول الثاني
+                # استبعاد الأعمدة الأساسية لتصبح باقي الأعمدة هي المواد فقط
                 excluded_keys = {seat_key, name_key, grade_key, total_key, percent_key, order_key, status_key}
                 excluded_keys = {k for k in excluded_keys if k is not None}
                 
