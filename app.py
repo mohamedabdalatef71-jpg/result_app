@@ -7,7 +7,6 @@ def load_data():
     xls = pd.ExcelFile('result.xlsx')
     sheet_name = xls.sheet_names[0]
     df = pd.read_excel(xls, sheet_name=sheet_name)
-    # تنظيف أسماء الأعمدة من المسافات الزائدة
     df.columns = [str(col).strip() for col in df.columns]
     return df
 
@@ -44,7 +43,6 @@ with col2:
 
 if show_button:
     if seat_no:
-        # البحث التلقائي عن عمود رقم الجلوس بصورة مرنة
         possible_cols = [c for c in df.columns if 'جلوس' in str(c) or str(c).strip() in ['الجلوس', 'رقم الجلوس', 'رقم_الجلوس']]
         seat_col = possible_cols[0] if possible_cols else None
         
@@ -56,25 +54,22 @@ if show_button:
             if match_indices:
                 st.success("تم العثور على النتيجة بنجاح!")
                 idx = match_indices[0]
-                row1 = df.iloc[idx]
-                row2 = df.iloc[idx + 1] if (idx + 1) < len(df) else None
+                
+                # أخذ الصف الوحيد للطالب بدون أي تداخل أو دمج لصفوف أخرى
+                row = df.iloc[idx]
                 
                 student_data = {}
                 for col in df.columns:
-                    v1 = str(row1[col]).strip() if pd.notna(row1[col]) else ""
-                    if v1.lower() == 'nan': v1 = ""
-                    v2 = str(row2[col]).strip() if row2 is not None and pd.notna(row2[col]) else ""
-                    if v2.lower() == 'nan': v2 = ""
-                    
-                    if "كود" in str(col) or "جلوس" in str(col):
-                        combined = f"{v1}{v2}".strip()
+                    val = str(row[col]).strip() if pd.notna(row[col]) else ""
+                    if val.lower() == 'nan': 
+                        val = ""
                     else:
-                        combined = f"{v1} {v2}".strip() if v1 and v2 and v1 != v2 else (v1 or v2)
-                    student_data[col] = combined
+                        val = val.replace('.0', '') if val.endswith('.0') and val.replace('.', '', 1).isdigit() else val
+                    student_data[col] = val
                 
                 base_keys = [c for c in df.columns if 'جلوس' in str(c) or 'اسم' in str(c) or 'كود' in str(c)]
                 personal_info = {k: student_data.get(k, "") for k in base_keys if k in student_data}
-                subjects_info = {k: v for k, v in student_data.items() if k not in base_keys}
+                subjects_info = {k: v for k, v in student_data.items() if k not in base_keys and v != ""}
                 
                 rows_html = "".join([f"<tr><td><b>{k}</b></td><td>{v}</td></tr>" for k, v in personal_info.items() if k and v])
                 rows_html += '<tr><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 10px 12px; white-space: nowrap;">المواد</th><th style="background-color: #1b4d3e; color: white; text-align: right; padding: 10px 12px; border-right: 2px solid #b8860b;">التقديرات / الدرجات</th></tr>'
@@ -195,6 +190,6 @@ if show_button:
             else:
                 st.error("رقم الجلوس غير موجود، تأكد من الرقم وادخله مرة أخرى.")
         else:
-            st.error(f"عفواً، لم يتم العثور على عمود يحتوي على 'جلوس' في الإكسيل. الأعمدة الموجودة حالياً هي: {list(df.columns)}")
+            st.error("عفواً، لم يتم العثور على عمود رقم الجلوس.")
     else:
         st.warning("الرجاء إدخال رقم الجلوس أولاً.")
